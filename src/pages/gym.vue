@@ -5,10 +5,31 @@
   >
     <div class="embedded-gym-container d-flex">
       <div class="embedded-gym-left-side">
-        <gym-spaces-and-routes :gym="gym" />
+        <gym-spaces-and-routes :active-gym-space="activeGymSpace" :gym="gym" />
       </div>
       <div class="embedded-gym-right-side flex-grow-1">
-        Plan ou 3D
+        <div v-if="activeGymSpace === null">
+          <keep-alive>
+            <gym-three-d
+              v-if="gym.representation_type === '3d'"
+              :gym="gym"
+            />
+            <div v-else>
+              Lise des espaces 2d
+            </div>
+          </keep-alive>
+        </div>
+        <keep-alive>
+          <gym-space-three-d
+            v-if="activeGymSpace && activeGymSpace.representation_type === '3d'"
+            :key="`gym-space-three-d-index-${activeGymSpace.id}`"
+            :gym="gym"
+            :gym-space="activeGymSpace"
+          />
+          <div v-else>
+            Plan 2d
+          </div>
+        </keep-alive>
       </div>
     </div>
     <div
@@ -24,10 +45,12 @@
 </template>
 
 <script setup>
-  import { ref, watch } from 'vue'
+  import { provide, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import { useDisplay } from 'vuetify'
-  import GymSpacesAndRoutes from '@/components/gyms/GymSpacesAndRoutes'
+  import GymSpacesAndRoutes from '@/components/gyms/GymSpacesAndRoutes.vue'
+  import GymThreeD from '@/components/gyms/GymThreeD.vue'
+  import GymSpaceThreeD from '@/components/gymSpaces/GymSpaceThreeD.vue'
 
   const { mobile } = useDisplay()
   const route = useRoute()
@@ -35,8 +58,10 @@
   const loading = ref(true)
   const gym = ref(null)
   const error = ref(null)
+  const activeGymSpace = ref(null)
 
   watch(() => route.params.id, fetchData, { immediate: true })
+  provide('Gym:switchGymSpace', switchGymSpace)
 
   async function fetchData (id) {
     const url = `http://localhost:3000/api/embedded/gyms/${id}.json`
@@ -49,11 +74,20 @@
       }
       const resultat = await reponse.json()
       gym.value = await resultat
+
+      // select first space if gym has one space
+      if (gym.value.gym_spaces.length === 1) {
+        activeGymSpace.value = gym.value.gym_spaces[0]
+      }
     } catch (error_) {
       error.value = error_.toString()
     } finally {
       loading.value = false
     }
+  }
+
+  function switchGymSpace (gymSpace) {
+    activeGymSpace.value = gymSpace
   }
 </script>
 
@@ -67,6 +101,8 @@
       width: 400px;
     }
     .embedded-gym-right-side {
+      height: 100vh;
+      overflow: hidden;
     }
   }
   .embedded-gym-toggle {

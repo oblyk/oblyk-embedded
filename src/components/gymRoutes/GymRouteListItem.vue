@@ -27,6 +27,7 @@
       </div>
     </v-list-item-title>
     <v-list-item-subtitle class="d-flex align-center mt-1">
+      <gym-route-climbing-simple-style-icons :gym-route="gymRoute" />
       <div class="mr-auto">
         <small v-if="gymRoute.anchor_number" class="d-block">
           {{ $t('models.gymRoute.anchor_number') }}{{ gymRoute.anchor_number }}
@@ -92,6 +93,7 @@
 <script setup>
   import { inject } from 'vue'
   import GymRouteAvatar from '@/components/gymRoutes/GymRouteAvatar'
+  import GymRouteClimbingSimpleStyleIcons from '@/components/gymRoutes/GymRouteClimbingSimpleStyleIcons'
   import GymRouteGradeAndPoint from '@/components/gymRoutes/GymRouteGradeAndPoint'
   import GymRouteSubLevel from '@/components/gymRoutes/GymRouteSubLevel'
 

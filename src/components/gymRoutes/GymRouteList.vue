@@ -62,7 +62,7 @@
   import GymRouteListItem from '@/components/gymRoutes/GymRouteListItem'
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar'
 
-  const props = defineProps({ gym: Object, gymSpace: Object, sort: String })
+  const props = defineProps({ gym: Object, activeGymSpace: Object, sort: String })
 
   const loadingRoutes = ref(true)
   const gymRoutes = ref([])
@@ -70,7 +70,7 @@
   const loadingNextPage = ref(false)
   const noMorePages = ref(false)
 
-  watch(() => props.gymSpace?.id, resetAndFetchRoutes, { immediate: false })
+  watch(() => props.activeGymSpace?.id, resetAndFetchRoutes, { immediate: false })
   watch(() => props.sort, resetAndFetchRoutes, { immediate: false })
 
   onMounted(() => {
@@ -92,9 +92,9 @@
 
     loadingNextPage.value = true
 
-    if (props.gymSpace) {
-      params.gym_space_id = props.gymSpace.id
-      params.append('gym_space_id', props.gymSpace.id)
+    if (props.activeGymSpace) {
+      params.gym_space_id = props.activeGymSpace.id
+      params.append('gym_space_id', props.activeGymSpace.id)
     }
 
     const reponse = await fetch(`${url}?${params}`)
