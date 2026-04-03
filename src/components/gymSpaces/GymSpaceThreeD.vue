@@ -34,8 +34,7 @@
         :id="`sector-label-${sector.id}`"
         :key="`sector-${sectorIndex}`"
         class="rounded font-weight-bold sector-label-in-space text-truncate"
-        :class="labelDisableEvent ? 'pointer-event-insensitive' : null"
-        :style="highlightSectorId === sector.id ? `background-color: ${gymSpace.sectors_color || 'rgb(0,0,0)'}; color: ${gymSpace.text_contrast_color}` : 'color: black'"
+        :class="highlightSectorId === sector.id ? '--highlight' : null"
         @click="filterBySector(sector.id)"
         @mousemove="highlightSector(sector)"
       >
@@ -49,7 +48,7 @@
   import * as THREE from 'three'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-  import { onMounted, ref } from 'vue'
+  import { onActivated, onDeactivated, onMounted, ref } from 'vue'
   import { useThreeJs } from '@/composables/useThreeJs.js'
 
   const spaceObject = ref(null)
@@ -57,7 +56,6 @@
   const sectorLineSegments = ref([])
   const loadingSpace = ref(true)
   const isDraggingScene = ref(false)
-  const labelDisableEvent = ref(false)
   const highlightSectorId = ref(false)
   const disableClick = ref(false)
 
@@ -79,6 +77,7 @@
     initLabelInsensitiveEvent,
     initTDAResizer,
     autoRotateScene,
+    stopAutoRotateScene,
     removeObject,
     calculatePointerPosition,
     raycaster,
@@ -90,6 +89,16 @@
   onMounted(() => {
     TDArea.value = document.querySelector('#three-d-area')
     initThreeJs()
+  })
+
+  onActivated(() => {
+    console.log('activated')
+    autoRotateScene(-0.6)
+  })
+
+  onDeactivated(() => {
+    console.log('deactivated')
+    stopAutoRotateScene()
   })
 
   function initThreeJs () {
@@ -204,7 +213,7 @@
     sectorsBuilder()
     initLabelInsensitiveEvent()
     initTDAResizer()
-    autoRotateScene(-0.6)
+    // autoRotateScene(-0.6)
   }
 
   function sectorsBuilder () {
@@ -328,6 +337,11 @@
   }
 
   function updateLabelsPosition () {
+    if (document.querySelector('.gym-three-space') === null) {
+      console.log('no space')
+      return false
+    }
+
     const tempV = new THREE.Vector3()
     for (const sector of sectorBoundingBoxes.value) {
       const box = new THREE.Box3().setFromObject(sector)
@@ -379,6 +393,7 @@
     transition: opacity 0.2s;
     opacity: 1;
     .sector-label-in-space {
+      color: black;
       position: absolute;
       top: 0;
       left: 0;
@@ -387,6 +402,10 @@
       font-size: 0.6em;
       padding: 2px 5px;
       cursor: pointer;
+      &.--highlight {
+        color: white;
+        background-color: rgba(0, 0, 0, 0.8);
+      }
     }
     &.--in-dragging-scene {
       opacity: 0.3;

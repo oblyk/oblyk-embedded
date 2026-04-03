@@ -10,7 +10,6 @@
         size="60"
       >
         <v-img
-          contain
           height="60"
           :src="imageVariant(gym.attachments.logo, { fit: 'scale-down', height: 100, width: 100 })"
           style="max-width: 60px"
@@ -44,7 +43,7 @@
         />
       </v-avatar>
       <p
-        class="my-0 text-center"
+        class="my-0 text-center text-truncate"
         :class="activeGymSpace?.id === space.id ? 'font-weight-medium text-deep-purple-accent-4' : ''"
       >
         {{ space.name }}
@@ -71,6 +70,7 @@
     border-radius: 8px;
     padding: 5px 4px 0 4px;
     cursor: pointer;
+    width: 70px;
     &:hover {
       background-color: rgba(98, 0, 234, 0.1);
     }
@@ -82,6 +82,9 @@
     &.--active {
       border-color: #6200EA;
     }
+  }
+  p {
+    font-size: 0.8em;
   }
 }
 </style>

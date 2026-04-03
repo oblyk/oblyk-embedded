@@ -21,6 +21,7 @@ export function useThreeJs (updateLabelsPosition) {
   const labelDisableTimeout = ref(null)
   const objectsSceneSize = ref(null)
   const autoRotate = ref(false)
+  const threeDLabels = ref([])
 
   // ─── Lifecycle ────────────────────────────────────────────────────────────
 
@@ -209,7 +210,14 @@ export function useThreeJs (updateLabelsPosition) {
     if (orbitControls.value) {
       orbitControls.value.update()
     }
+    for (const label of threeDLabels.value) {
+      label.quaternion.copy(camera.value.quaternion)
+    }
     renderScene()
+  }
+
+  function stopAutoRotateScene () {
+    orbitControls.value.autoRotate = false
   }
 
   function fitCameraToObjects (objects, offset = 1.2) {
@@ -350,6 +358,7 @@ export function useThreeJs (updateLabelsPosition) {
     labelDisableTimeout,
     objectsSceneSize,
     autoRotate,
+    threeDLabels,
 
     // Methods
     resizeThreeJsContainer,
@@ -366,6 +375,7 @@ export function useThreeJs (updateLabelsPosition) {
     canvasToPng,
     canvasToFile,
     autoRotateScene,
+    stopAutoRotateScene,
     animate,
     fitCameraToObjects,
     setView,

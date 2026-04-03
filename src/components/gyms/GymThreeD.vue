@@ -48,6 +48,7 @@
   import * as THREE from 'three'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+  import { Text } from 'troika-three-text'
   import { inject, onMounted, ref } from 'vue'
   import { useThreeJs } from '@/composables/useThreeJs.js'
 
@@ -77,13 +78,13 @@
     initLabelInsensitiveEvent,
     initTDAResizer,
     autoRotateScene,
-    removeObject,
     calculatePointerPosition,
     raycaster,
     pointer,
     disableClick,
     isDraggingScene,
     labelDisableEvent,
+    threeDLabels,
   } = useThreeJs(updateLabelsPosition)
 
   onMounted(() => {
@@ -169,6 +170,37 @@
 
         spaces.value.push(object)
         scene.value.add(object)
+
+        // Add space name
+        const size = new THREE.Vector3()
+        const box = new THREE.Box3().setFromObject(object)
+        box.getSize(size)
+        let centerX, centerZ, centerY
+        if (space.three_d_label_options) {
+          centerX = space.three_d_label_options.x === null ? 50 : space.three_d_label_options.x
+          centerZ = space.three_d_label_options.z === null ? 50 : space.three_d_label_options.z
+          centerY = space.three_d_label_options.y === null ? 50 : space.three_d_label_options.y
+        } else {
+          centerX = 50
+          centerZ = 50
+          centerY = 50
+        }
+        console.log(centerX, centerZ, centerY, space.name, 'les centers')
+        console.log(size.x, size.z, size.y, space.name, 'les size')
+        const spaceName = new Text()
+        spaceName.text = space.name
+        spaceName.fontSize = 0.9
+        spaceName.anchorX = 'center'
+        spaceName.anchorY = 'middle'
+        spaceName.outlineColor = 'black'
+        spaceName.outlineWidth = 0.05
+        spaceName.outlineBlur = 0.5
+        spaceName.outlineOpacity = 0.2
+        spaceName.position.x = (space.three_d_position?.x ?? 0) + size.x * (centerX - 50) / 100
+        spaceName.position.z = (space.three_d_position?.z ?? 0) + size.z * (centerZ - 50) / 100
+        spaceName.position.y = (space.three_d_position?.y ?? 0) + size.y * centerY / 100 - Number.parseFloat(space.three_d_position?.y || '0')
+        scene.value.add(spaceName)
+        threeDLabels.value.push(spaceName)
 
         // Center scene to all boxes
         if (spaceIndex === props.gym.gym_spaces.length) {
@@ -349,6 +381,10 @@
   }
 
   function updateLabelsPosition () {
+    if (document.querySelector('.gym-three-spaces') === null) {
+      console.log('no spaces')
+      return false
+    }
     const tempV = new THREE.Vector3()
     for (const space of spaces.value) {
       const box = new THREE.Box3().setFromObject(space)

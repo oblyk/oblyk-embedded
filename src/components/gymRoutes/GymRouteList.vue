@@ -59,8 +59,10 @@
 
 <script setup>
   import { onMounted, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import GymRouteListItem from '@/components/gymRoutes/GymRouteListItem'
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar'
+  const { t } = useI18n()
 
   const props = defineProps({ gym: Object, activeGymSpace: Object, sort: String })
 
