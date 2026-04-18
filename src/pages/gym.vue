@@ -76,6 +76,7 @@
   import GymSpaceThreeD from '@/components/gymSpaces/GymSpaceThreeD.vue'
   import OblykLogoName from '@/components/ui/OblykLogoName.vue'
 
+  const apiBaseUrl = import.meta.env.VITE_OBLYK_API_BASE_URL
   const { mobile } = useDisplay()
   const theme = useTheme()
   const route = useRoute()
@@ -97,7 +98,7 @@
   })
 
   async function fetchData (id) {
-    const url = `http://localhost:3000/api/embedded/gyms/${id}.json`
+    const url = `${apiBaseUrl}/api/embedded/gyms/${id}.json`
     loading.value = true
 
     try {

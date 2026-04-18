@@ -62,6 +62,7 @@
   import GymRouteListItem from '@/components/gymRoutes/GymRouteListItem'
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar'
   const { t } = useI18n()
+  const apiBaseUrl = import.meta.env.VITE_OBLYK_API_BASE_URL
 
   const props = defineProps({
     gym: Object,
@@ -92,7 +93,7 @@
   }
 
   async function fetchRoutes () {
-    const url = `http://localhost:3000/api/embedded/gyms/${props.gym.id}/gym_routes.json`
+    const url = `${apiBaseUrl}/api/embedded/gyms/${props.gym.id}/gym_routes.json`
     const params = new URLSearchParams()
     params.append('sort', props.sort)
     params.append('page', page.value)

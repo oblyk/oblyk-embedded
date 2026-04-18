@@ -76,9 +76,10 @@
   import GymRouteInfo from '@/components/gymRoutes/GymRouteInfo.vue'
   import GymRouteList from '@/components/gymRoutes/GymRouteList.vue'
   import GymRoutesSort from '@/components/gymRoutes/GymRoutesSort.vue'
+  import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar.vue'
   import GymSpacesSelector from '@/components/gymSpaces/GymSpacesSelector.vue'
-  import GymSectorAvatar from "@/components/gymSectors/GymSectorAvatar.vue";
   const { t } = useI18n()
+  const apiBaseUrl = import.meta.env.VITE_OBLYK_API_BASE_URL
 
   const props = defineProps({ gym: Object, activeGymSpace: Object, activeGymSector: Object })
 
@@ -96,7 +97,7 @@
   async function getRoute (route) {
     loadingRoute.value = true
     switchTab('route-info')
-    const url = `http://localhost:3000/api/embedded/gyms/${props.gym.id}/gym_routes/${route.id}.json`
+    const url = `${apiBaseUrl}/api/embedded/gyms/${props.gym.id}/gym_routes/${route.id}.json`
     const reponse = await fetch(url)
     if (!reponse.ok) {
       throw new Error(`Statut de réponse : ${reponse.status}`)
