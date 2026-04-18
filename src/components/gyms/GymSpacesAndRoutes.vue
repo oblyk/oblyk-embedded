@@ -18,6 +18,32 @@
               :gym="gym"
             />
 
+            <!-- GYM SECTORS ACTIVE FILTER -->
+            <div
+              v-if="activeGymSector"
+              :key="`sector-key-${activeGymSector?.id}`"
+              class="mb-2 px-2"
+            >
+              <p class="mt-0 mb-1 font-italic">
+                <v-icon class="mr-1" size="small">mdi-filter</v-icon>
+                Filtré sur le secteur :
+              </p>
+              <div class="border rounded-pill d-flex align-center pl-3">
+                <gym-sector-avatar :gym-sector="activeGymSector" :gym-space="activeGymSpace" />
+                <div class="ml-2 font-weight-medium">
+                  {{ activeGymSector.name }}
+                </div>
+                <v-btn
+                  class="ml-auto"
+                  elevation="0"
+                  icon
+                  @click="switchGymSector(null)"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </div>
+            </div>
+
             <!-- GYM ROUTES SORTS -->
             <div class="mb-0 font-weight-medium border-b">
               <gym-routes-sort :routes-sort="routesSort" />
@@ -27,6 +53,7 @@
           <!-- GYM ROUTES LIST -->
           <div class="routes-list flex-grow-1">
             <gym-route-list
+              :active-gym-sector="activeGymSector"
               :active-gym-space="activeGymSpace"
               :gym="gym"
               :sort="routesSort"
@@ -36,14 +63,7 @@
 
         <!-- SELECTED ROUTE (SECOND PANEL) -->
         <v-tabs-window-item value="route-info">
-          <v-btn
-            elevation="0"
-            icon
-            @click="tab = 'route-list'"
-          >
-            <v-icon>mdi-arrow-left</v-icon>
-          </v-btn>
-          route
+          <gym-route-info :gym-route="gymRoute" :loading="loadingRoute" />
         </v-tabs-window-item>
       </v-tabs-window>
     </v-sheet>
@@ -51,29 +71,47 @@
 </template>
 
 <script setup>
-  import { provide, ref } from 'vue'
+  import { inject, provide, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import GymRouteList from '@/components/gymRoutes/GymRouteList'
-  import GymRoutesSort from '@/components/gymRoutes/GymRoutesSort'
-  import GymSpacesSelector from '@/components/gymSpaces/GymSpacesSelector'
+  import GymRouteInfo from '@/components/gymRoutes/GymRouteInfo.vue'
+  import GymRouteList from '@/components/gymRoutes/GymRouteList.vue'
+  import GymRoutesSort from '@/components/gymRoutes/GymRoutesSort.vue'
+  import GymSpacesSelector from '@/components/gymSpaces/GymSpacesSelector.vue'
+  import GymSectorAvatar from "@/components/gymSectors/GymSectorAvatar.vue";
   const { t } = useI18n()
 
-  const props = defineProps({ gym: Object, activeGymSpace: Object })
+  const props = defineProps({ gym: Object, activeGymSpace: Object, activeGymSector: Object })
 
   const tab = ref('route-list')
   const routesSort = ref('opened_at')
   const gymRoute = ref({})
+  const loadingRoute = ref(true)
 
   provide('GymSpaceAndRoutes:getRoute', getRoute)
   provide('GymSpaceAndRoutes:sortSwitch', sortSwitch)
+  provide('GymSpaceAndRoutes:switchTab', switchTab)
 
-  function getRoute (route) {
-    tab.value = 'route-info'
-    gymRoute.value = route
+  const switchGymSector = inject('Gym:switchGymSector')
+
+  async function getRoute (route) {
+    loadingRoute.value = true
+    switchTab('route-info')
+    const url = `http://localhost:3000/api/embedded/gyms/${props.gym.id}/gym_routes/${route.id}.json`
+    const reponse = await fetch(url)
+    if (!reponse.ok) {
+      throw new Error(`Statut de réponse : ${reponse.status}`)
+    }
+    const resultat = await reponse.json()
+    gymRoute.value = await resultat
+    loadingRoute.value = false
   }
 
   function sortSwitch (sort) {
     routesSort.value = sort
+  }
+
+  function switchTab (tabName) {
+    tab.value = tabName
   }
 </script>
 
@@ -84,6 +122,7 @@
     font-size: 1.2rem;
   }
   .embedded-gym-spaces-and-routes-v-sheet {
+    border-radius: 15px;
     height: 100%;
     .v-tabs-window {
       height: 100%;

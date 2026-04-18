@@ -10,11 +10,14 @@
 
 <script setup>
   import L, { CRS } from 'leaflet'
-  import { onMounted, onUnmounted, ref } from 'vue'
+  import { inject, onMounted, onUnmounted, ref } from 'vue'
   import { imageVariant } from '@/composables/useImageVariant.js'
   import 'leaflet/dist/leaflet.css'
 
   const props = defineProps({ gym: Object, gymSpace: Object })
+
+  const switchGymSector = inject('Gym:switchGymSector')
+
   const map = ref(null)
 
   const url = imageVariant(props.gymSpace.attachments.plan, { fit: 'scale-down', height: 4000, width: 4000 })
@@ -33,7 +36,7 @@
     // Add sectors
     for (const sector of props.gymSpace.gym_sectors) {
       if (sector.polygon) {
-        L.polygon(
+        const sectorPolygon = L.polygon(
           JSON.parse(sector.polygon),
           {
             className: 'gym-sector-polygon',
@@ -42,7 +45,9 @@
             color: props.gymSpace.sectors_color ?? 'rgb(49, 153, 78)',
             dashArray: [5, 5],
           },
-        ).addTo(map.value)
+        )
+        sectorPolygon.on('click', () => filterBySector(sector))
+        sectorPolygon.addTo(map.value)
       }
     }
     setMapView()
@@ -56,8 +61,8 @@
     map.value.fitBounds(bounds)
   }
 
-  function filterBySector (sectorId) {
-    console.log(sectorId)
+  function filterBySector (sector) {
+    switchGymSector(sector)
   }
 </script>
 

@@ -2,6 +2,7 @@ export default {
   hello: 'Bonjour',
   welcome: 'Bienvenue',
   endOfList: 'Fin de la liste',
+  noInformation: 'Non renseigné',
   gym: {
     opened_at: 'Date d\'ouverture',
     sector: 'Secteur',
@@ -13,6 +14,9 @@ export default {
       color: 'Trier par couleur',
       grade: 'Trier par cotation',
     },
+  },
+  gymRoute: {
+    anchor_number: 'Relais n°',
   },
   climbingStyle: {
     boulder: 'Bloc',

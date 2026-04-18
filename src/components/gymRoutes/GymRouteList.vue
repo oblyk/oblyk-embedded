@@ -24,7 +24,6 @@
         >
           <template #prepend>
             <gym-sector-avatar
-              class="pt-1"
               :gym-sector="route.gym_sector"
               :gym-space="sectorGymSpace(route.gym_sector.gym_space_id)"
               :size="40"
@@ -64,7 +63,12 @@
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar'
   const { t } = useI18n()
 
-  const props = defineProps({ gym: Object, activeGymSpace: Object, sort: String })
+  const props = defineProps({
+    gym: Object,
+    activeGymSpace: Object,
+    activeGymSector: Object,
+    sort: String,
+  })
 
   const loadingRoutes = ref(true)
   const gymRoutes = ref([])
@@ -73,6 +77,7 @@
   const noMorePages = ref(false)
 
   watch(() => props.activeGymSpace?.id, resetAndFetchRoutes, { immediate: false })
+  watch(() => props.activeGymSector?.id, resetAndFetchRoutes, { immediate: false })
   watch(() => props.sort, resetAndFetchRoutes, { immediate: false })
 
   onMounted(() => {
@@ -95,8 +100,11 @@
     loadingNextPage.value = true
 
     if (props.activeGymSpace) {
-      params.gym_space_id = props.activeGymSpace.id
       params.append('gym_space_id', props.activeGymSpace.id)
+    }
+
+    if (props.activeGymSector) {
+      params.append('gym_sector_id', props.activeGymSector.id)
     }
 
     const reponse = await fetch(`${url}?${params}`)

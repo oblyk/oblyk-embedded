@@ -24,23 +24,6 @@
         chargement
       </p>
     </div>
-    <div
-      v-show="!loadingSpaces"
-      class="spaces-list"
-      :class="isDraggingScene ? '--in-dragging-scene' : ''"
-    >
-      <div
-        v-for="(space, spaceIndex) in gym.gym_spaces"
-        :id="`space-label-${space.id}`"
-        :key="`space-${spaceIndex}`"
-        class="rounded font-weight-bold sector-label-in-spaces"
-        :class="labelDisableEvent ? 'pointer-event-insensitive' : null"
-        :style="activeSpaceId === space.id ? `background-color: ${space.color || 'rgb(0, 0, 0)'}; color: ${space.text_contrast_color}` : 'color: black'"
-        @mousemove.stop="glossySpace(space.id)"
-      >
-        {{ space.name }}
-      </div>
-    </div>
   </div>
 </template>
 
@@ -82,10 +65,8 @@
     raycaster,
     pointer,
     disableClick,
-    isDraggingScene,
-    labelDisableEvent,
     threeDLabels,
-  } = useThreeJs(updateLabelsPosition)
+  } = useThreeJs()
 
   onMounted(() => {
     TDArea.value = document.querySelector('#three-d-area')
@@ -123,7 +104,8 @@
 
     const edgeLine = new THREE.LineBasicMaterial({ color: edgeColor.value, opacity: 0.3, transparent: true })
     let spaceIndex = 0
-    for (const space of props.gym.gym_spaces) {
+    const filteredSpaces = props.gym.gym_spaces.filter(space => space.three_d_gltf_url !== null && space.three_d_gltf_url !== '2d_picture')
+    for (const space of filteredSpaces) {
       loader.load(space.three_d_gltf_url, gltf => {
         spaceIndex += 1
         const object = gltf.scene
@@ -174,7 +156,9 @@
         // Add space name
         const size = new THREE.Vector3()
         const box = new THREE.Box3().setFromObject(object)
+        const center = new THREE.Vector3()
         box.getSize(size)
+        box.getCenter(center)
         let centerX, centerZ, centerY
         if (space.three_d_label_options) {
           centerX = space.three_d_label_options.x === null ? 50 : space.three_d_label_options.x
@@ -185,25 +169,23 @@
           centerZ = 50
           centerY = 50
         }
-        console.log(centerX, centerZ, centerY, space.name, 'les centers')
-        console.log(size.x, size.z, size.y, space.name, 'les size')
         const spaceName = new Text()
         spaceName.text = space.name
         spaceName.fontSize = 0.9
         spaceName.anchorX = 'center'
         spaceName.anchorY = 'middle'
         spaceName.outlineColor = 'black'
-        spaceName.outlineWidth = 0.05
-        spaceName.outlineBlur = 0.5
-        spaceName.outlineOpacity = 0.2
-        spaceName.position.x = (space.three_d_position?.x ?? 0) + size.x * (centerX - 50) / 100
-        spaceName.position.z = (space.three_d_position?.z ?? 0) + size.z * (centerZ - 50) / 100
-        spaceName.position.y = (space.three_d_position?.y ?? 0) + size.y * centerY / 100 - Number.parseFloat(space.three_d_position?.y || '0')
+        spaceName.outlineWidth = 0.07
+        spaceName.outlineBlur = 0
+        spaceName.outlineOpacity = 1
+        spaceName.position.x = center.x + size.x * (centerX - 50) / 100
+        spaceName.position.z = center.z + size.z * (centerZ - 50) / 100
+        spaceName.position.y = center.y * 2 - Number.parseFloat(space.three_d_position?.y || '0')
         scene.value.add(spaceName)
         threeDLabels.value.push(spaceName)
 
         // Center scene to all boxes
-        if (spaceIndex === props.gym.gym_spaces.length) {
+        if (spaceIndex === filteredSpaces.length) {
           const allBoxes = new THREE.Box3()
           for (const space of spaces.value) {
             allBoxes.expandByObject(space)
@@ -378,46 +360,6 @@
 
   function endHighlightSpace () {
     TDArea.value.addEventListener('mousemove', highlightSpace, false)
-  }
-
-  function updateLabelsPosition () {
-    if (document.querySelector('.gym-three-spaces') === null) {
-      console.log('no spaces')
-      return false
-    }
-    const tempV = new THREE.Vector3()
-    for (const space of spaces.value) {
-      const box = new THREE.Box3().setFromObject(space)
-      const size = new THREE.Vector3()
-      const center = new THREE.Vector3()
-      box.getSize(size)
-      box.getCenter(center)
-      let centerX, centerZ, centerY
-      if (space.userData.space.three_d_label_options) {
-        centerX = space.userData.space.three_d_label_options.x === null ? 50 : space.userData.space.three_d_label_options.x
-        centerZ = space.userData.space.three_d_label_options.z === null ? 50 : space.userData.space.three_d_label_options.z
-        centerY = space.userData.space.three_d_label_options.y === null ? 50 : space.userData.space.three_d_label_options.y
-      } else {
-        centerX = 50
-        centerZ = 50
-        centerY = 50
-      }
-      center.x = center.x + size.x * (centerX - 50) / 100
-      center.z = center.z + size.z * (centerZ - 50) / 100
-      center.y = center.y * 2 + size.y * (centerY - 100) / 100 - Number.parseFloat(space.userData.space.three_d_position?.y || '0')
-      tempV.copy(center)
-      tempV.project(camera.value)
-
-      // convert the normalized position to CSS coordinates
-      const x = (tempV.x * 0.5 + 0.5) * TDArea.value.offsetWidth
-      const y = (tempV.y * -0.5 + 0.5) * TDArea.value.offsetHeight
-
-      const domElement = document.querySelector(`#space-label-${space.userData.space.id}`)
-      if (domElement !== null) {
-        domElement.style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`
-        domElement.style.zIndex = Math.trunc(-tempV.z * 0.5 + 0.5)
-      }
-    }
   }
 </script>
 

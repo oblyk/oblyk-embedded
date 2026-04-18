@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { onBeforeUnmount, ref, toRaw } from 'vue'
 
-export function useThreeJs (updateLabelsPosition) {
+export function useThreeJs () {
   // State (équivalent de data())
   const TDArea = ref(null)
   const camera = ref(null)
@@ -84,7 +84,6 @@ export function useThreeJs (updateLabelsPosition) {
 
   function renderScene () {
     renderer.value.render(toRaw(scene.value), camera.value)
-    updateLabelsPosition()
   }
 
   function calculatePointerPosition (event) {

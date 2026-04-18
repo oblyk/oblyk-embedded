@@ -5,7 +5,7 @@
     :size="size"
     tile
   >
-    <div v-html="gymSpace.svg_sectors" />
+    <div :style="`height: ${size}px`" v-html="gymSpace.svg_sectors" />
   </v-avatar>
 </template>
 <script setup>

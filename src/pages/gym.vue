@@ -5,7 +5,11 @@
   >
     <div class="embedded-gym-container d-flex">
       <div class="embedded-gym-left-side">
-        <gym-spaces-and-routes :active-gym-space="activeGymSpace" :gym="gym" />
+        <gym-spaces-and-routes
+          :active-gym-sector="activeGymSector"
+          :active-gym-space="activeGymSpace"
+          :gym="gym"
+        />
       </div>
       <div
         v-if="gym"
@@ -81,9 +85,11 @@
   const mode = ref('iframe')
   const error = ref(null)
   const activeGymSpace = ref(null)
+  const activeGymSector = ref(null)
 
   watch(() => route.params.id, fetchData, { immediate: true })
   provide('Gym:switchGymSpace', switchGymSpace)
+  provide('Gym:switchGymSector', switchGymSector)
 
   onBeforeMount(() => {
     mode.value = route.query.mode ?? 'iframe'
@@ -116,7 +122,12 @@
   }
 
   function switchGymSpace (gymSpace) {
+    activeGymSector.value = null
     activeGymSpace.value = gymSpace
+  }
+
+  function switchGymSector (gymSector) {
+    activeGymSector.value = gymSector
   }
 
   function setStyle () {
@@ -125,10 +136,10 @@
     theme.change(queryTheme)
 
     // Background color
-    const bgColor = route.query.bg_color?.split('|')
+    const bgColor = route.query.bg_color?.split('|') ?? []
     const linearDeg = route.query.bg_linear_deg ?? 90
     if (bgColor.length > 0) {
-      if (bgColor.length === 0) {
+      if (bgColor.length === 1) {
         document.querySelector('.v-application').style.backgroundColor = bgColor[0]
       } else if (bgColor.length > 1) {
         document.querySelector('.v-application').style.background = `linear-gradient(${linearDeg}deg, ${bgColor?.join(', ')})`
