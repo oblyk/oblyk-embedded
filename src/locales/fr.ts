@@ -3,6 +3,10 @@ export default {
   welcome: 'Bienvenue',
   endOfList: 'Fin de la liste',
   noInformation: 'Non renseigné',
+  liste: 'Liste',
+  map: 'Plan',
+  loadingGym: 'Chargement de salle ...',
+  loading3D: 'Chargement du 3D ...',
   gym: {
     opened_at: 'Date d\'ouverture',
     sector: 'Secteur',

@@ -32,9 +32,6 @@
           </div>
         </div>
       </div>
-      <div class="text-center font-italic">
-        Ouvert par {{ gymRoute.opener_names }} le {{ gymRoute.opened_at }}
-      </div>
     </div>
   </div>
 </template>

@@ -3,6 +3,10 @@ export default {
   welcome: 'Welcome',
   endOfList: 'End of list',
   noInformation: 'No information',
+  liste: 'List',
+  map: 'Map',
+  loadingGym: 'Loading climbing gym...',
+  loading3D: 'Loading 3D ...',
   gym: {
     opened_at: 'Opening date',
     sector: 'Sector',

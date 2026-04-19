@@ -7,20 +7,28 @@
       v-if="loadingSpace"
       class="full-height d-flex flex-column justify-center"
     >
-      <p class="text-center">
-        <small class="font-weight-bold">
-          chargement ...
-        </small>
-      </p>
+      <div class="loading-space-three-d d-flex align-center justify-center text-center">
+        <div>
+          <animate-oblyk-logo color="#6200EA" stroke-linejoin="round" />
+          <p class="font-weight-medium text-disabled mt-0">
+            {{ t('loading3D') }}
+          </p>
+        </div>
+      </div>
     </div>
     <div
       v-show="!loadingSpace"
       id="three-d-area"
       class="full-height --transparent"
     >
-      <p class="text-center mt-10">
-        chargement ...
-      </p>
+      <div class="loading-space-three-d d-flex align-center justify-center text-center">
+        <div>
+          <animate-oblyk-logo color="#6200EA" stroke-linejoin="round" />
+          <p class="font-weight-medium text-disabled mt-0">
+            {{ t('loading3D') }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -31,8 +39,11 @@
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
   import { Text } from 'troika-three-text'
   import { inject, onMounted, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
+  import AnimateOblykLogo from '@/components/ui/AnimateOblykLogo.vue'
   import { useThreeJs } from '@/composables/useThreeJs.js'
 
+  const { t } = useI18n()
   const spaceObject = ref(null)
   const sectorBoundingBoxes = ref([])
   const sectorLineSegments = ref([])
@@ -155,11 +166,13 @@
       addShadowLight([object])
       orbitControls.value.update()
 
-      loadingSpace.value = false
+      setTimeout(() => {
+        loadingSpace.value = false
+      }, 500)
       setTimeout(() => {
         fitCameraToObjects([spaceObject.value])
         TDArea.value.classList.remove('--transparent')
-      }, 100)
+      }, 1000)
     })
 
     TDArea.value.innerHTML = null
@@ -382,6 +395,9 @@
         max-width: 80px;
       }
     }
+  }
+  .loading-space-three-d {
+    height: 100vh;
   }
 }
 </style>

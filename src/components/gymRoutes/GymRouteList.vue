@@ -49,7 +49,7 @@
     </div>
     <p
       v-if="noMorePages"
-      class="text-center text-disabled py-4"
+      class="text-center text-disabled pt-4 pb-12"
     >
       {{ t('endOfList') }}
     </p>

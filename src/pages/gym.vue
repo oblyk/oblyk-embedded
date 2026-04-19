@@ -2,6 +2,7 @@
   <div
     v-if="!loading"
     class="embedded-gym"
+    :class="mobileToggle"
   >
     <div class="embedded-gym-container d-flex">
       <div class="embedded-gym-left-side">
@@ -45,15 +46,40 @@
         </keep-alive>
       </div>
     </div>
-    <div
-      v-if="mobile"
-      class="embedded-gym-toggle"
-    >
-      toggle
+    <div class="embedded-gym-toggle">
+      <v-btn-toggle
+        v-model="mobileToggle"
+        class="border"
+        color="black"
+        mandatory
+        rounded="xl"
+      >
+        <v-btn
+          prepend-icon="mdi-format-list-text"
+          value="active-side--left"
+        >
+          {{ t('liste') }}
+        </v-btn>
+
+        <v-btn
+          prepend-icon="mdi-map"
+          value="active-side--right"
+        >
+          {{ t('map') }}
+        </v-btn>
+      </v-btn-toggle>
     </div>
   </div>
-  <div v-else>
-    Chargement ...
+  <div
+    v-else
+    class="loading-embedded-gym d-flex align-center justify-center"
+  >
+    <div class="text-center">
+      <animate-oblyk-logo color="#6200EA" stroke-linejoin="round" />
+      <p class="font-weight-medium text-disabled mt-0">
+        {{ t('loadingGym') }}
+      </p>
+    </div>
   </div>
   <v-chip
     class="powered-by-oblyk"
@@ -67,22 +93,25 @@
 
 <script setup>
   import { onBeforeMount, provide, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
-  import { useDisplay, useTheme } from 'vuetify'
+  import { useTheme } from 'vuetify'
   import GymSpacesAndRoutes from '@/components/gyms/GymSpacesAndRoutes.vue'
   import GymThreeD from '@/components/gyms/GymThreeD.vue'
   import GymSpaceList from '@/components/gymSpaces/GymSpaceList.vue'
   import GymSpacePlan from '@/components/gymSpaces/GymSpacePlan.vue'
   import GymSpaceThreeD from '@/components/gymSpaces/GymSpaceThreeD.vue'
+  import AnimateOblykLogo from '@/components/ui/AnimateOblykLogo.vue'
   import OblykLogoName from '@/components/ui/OblykLogoName.vue'
   import { oblykApi } from '@/services/oblykApi.js'
 
-  const { mobile } = useDisplay()
+  const { t } = useI18n()
   const theme = useTheme()
   const route = useRoute()
 
   const loading = ref(true)
   const gym = ref(null)
+  const mobileToggle = ref('active-side--left')
   const mode = ref('iframe')
   const activeGymSpace = ref(null)
   const activeGymSector = ref(null)
@@ -109,7 +138,9 @@
 
       document.title = gym.value.name
     } finally {
-      loading.value = false
+      setTimeout(() => {
+        loading.value = false
+      }, 500)
     }
   }
 
@@ -119,6 +150,7 @@
   }
 
   function switchGymSector (gymSector) {
+    mobileToggle.value = 'active-side--left'
     activeGymSector.value = gymSector
   }
 
@@ -146,7 +178,7 @@
   position: relative;
   .embedded-gym-container {
     .embedded-gym-left-side {
-      max-width: 400px;
+      max-width: 100%;
       width: 400px;
     }
     .embedded-gym-right-side {
@@ -155,15 +187,47 @@
     }
   }
   .embedded-gym-toggle {
+    display: none;
     position: absolute;
-    bottom: 0;
-    left: calc(50% - 50px);
+    bottom: 13px;
+    left: calc(50% - 90px);
   }
+}
+.loading-embedded-gym {
+  height: 100vh;
 }
 .powered-by-oblyk {
   border-color: rgba(150, 150, 150, 0.5);
   position: fixed;
   bottom: 5px;
   right: 5px;
+}
+@media (max-width: 800px) {
+  .embedded-gym {
+    .embedded-gym-container {
+      .embedded-gym-left-side {
+        width: 100vw;
+        position: fixed;
+        height: 100vh;
+        left: 0;
+        opacity: 1;
+        transition: left 0.3s, opacity 0.3s;
+        z-index: 1;
+      }
+      .embedded-gym-right-side {
+        width: 100vw;
+      }
+    }
+    .embedded-gym-toggle {
+      display: block;
+      z-index: 2;
+    }
+    &.active-side--right {
+      .embedded-gym-left-side {
+        left: -100vw;
+        opacity: 0;
+      }
+    }
+  }
 }
 </style>
