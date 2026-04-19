@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-  import { inject, provide, ref } from 'vue'
+  import { inject, provide, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
   import GymRouteInfo from '@/components/gymRoutes/GymRouteInfo.vue'
   import GymRouteList from '@/components/gymRoutes/GymRouteList.vue'
@@ -94,6 +94,9 @@
   provide('GymSpaceAndRoutes:sortSwitch', sortSwitch)
   provide('GymSpaceAndRoutes:switchTab', switchTab)
 
+  watch(() => props.activeGymSpace?.id, resetTab, { immediate: false })
+  watch(() => props.activeGymSector?.id, resetTab, { immediate: false })
+
   async function getRoute (route) {
     loadingRoute.value = true
     switchTab('route-info')
@@ -107,6 +110,10 @@
 
   function switchTab (tabName) {
     tab.value = tabName
+  }
+
+  function resetTab () {
+    tab.value = 'route-list'
   }
 </script>
 
