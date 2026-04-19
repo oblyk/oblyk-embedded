@@ -6,7 +6,7 @@
       prepend-icon="mdi-arrow-left"
       @click="switchTab('route-list')"
     >
-      RETOUR À LA LISTE DES VOIES
+      {{ t('gymRoute.backToList') }}
     </v-btn>
   </div>
   <div>
@@ -25,7 +25,7 @@
             {{ gymRoute.likes_count }}
           </div>
           <div>
-            <gym-sector-avatar :gym-sector="gymRoute.gym_sector" :gym-space="gymRoute.gym_space" />
+            <gym-sector-avatar :gym-sector="gymRoute.gym_sector" :gym-space="gymRoute.gym_sector.gym_space" />
           </div>
         </div>
       </div>
@@ -38,12 +38,12 @@
 
 <script setup>
   import { inject } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import GymRouteListItem from '@/components/gymRoutes/GymRouteListItem.vue'
   import GymRoutePicture from '@/components/gymRoutes/GymRoutePicture.vue'
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar.vue'
-  import DescriptionLine from '@/components/ui/DescriptionLine.vue'
 
+  const { t } = useI18n()
   const switchTab = inject('GymSpaceAndRoutes:switchTab')
-
   const props = defineProps({ gym: Object, gymRoute: Object, gymSpace: Object, loading: Boolean })
 </script>

@@ -75,8 +75,8 @@
   import GymSpacePlan from '@/components/gymSpaces/GymSpacePlan.vue'
   import GymSpaceThreeD from '@/components/gymSpaces/GymSpaceThreeD.vue'
   import OblykLogoName from '@/components/ui/OblykLogoName.vue'
+  import { oblykApi } from '@/services/oblykApi.js'
 
-  const apiBaseUrl = import.meta.env.VITE_OBLYK_API_BASE_URL
   const { mobile } = useDisplay()
   const theme = useTheme()
   const route = useRoute()
@@ -84,7 +84,6 @@
   const loading = ref(true)
   const gym = ref(null)
   const mode = ref('iframe')
-  const error = ref(null)
   const activeGymSpace = ref(null)
   const activeGymSector = ref(null)
 
@@ -98,25 +97,17 @@
   })
 
   async function fetchData (id) {
-    const url = `${apiBaseUrl}/api/embedded/gyms/${id}.json`
     loading.value = true
 
     try {
-      const reponse = await fetch(url)
-      if (!reponse.ok) {
-        throw new Error(`Statut de réponse : ${reponse.status}`)
-      }
-      const resultat = await reponse.json()
-      gym.value = await resultat
+      gym.value = await oblykApi.get(`/api/embedded/gyms/${id}.json`)
 
-      // select first space if gym has one space
+      // Select first space if gym has one space
       if (gym.value.gym_spaces.length === 1) {
         activeGymSpace.value = gym.value.gym_spaces[0]
       }
 
       document.title = gym.value.name
-    } catch (error_) {
-      error.value = error_.toString()
     } finally {
       loading.value = false
     }

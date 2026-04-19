@@ -16,6 +16,7 @@ export default {
     },
   },
   gymRoute: {
+    backToList: 'RETOUR À LA LISTE DES VOIES',
     anchor_number: 'Relais n°',
   },
   climbingStyle: {

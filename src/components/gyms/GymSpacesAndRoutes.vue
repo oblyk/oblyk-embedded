@@ -78,32 +78,26 @@
   import GymRoutesSort from '@/components/gymRoutes/GymRoutesSort.vue'
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar.vue'
   import GymSpacesSelector from '@/components/gymSpaces/GymSpacesSelector.vue'
+  import { oblykApi } from '@/services/oblykApi.js'
+
   const { t } = useI18n()
-  const apiBaseUrl = import.meta.env.VITE_OBLYK_API_BASE_URL
 
   const props = defineProps({ gym: Object, activeGymSpace: Object, activeGymSector: Object })
-
   const tab = ref('route-list')
   const routesSort = ref('opened_at')
   const gymRoute = ref({})
   const loadingRoute = ref(true)
 
+  const switchGymSector = inject('Gym:switchGymSector')
+
   provide('GymSpaceAndRoutes:getRoute', getRoute)
   provide('GymSpaceAndRoutes:sortSwitch', sortSwitch)
   provide('GymSpaceAndRoutes:switchTab', switchTab)
 
-  const switchGymSector = inject('Gym:switchGymSector')
-
   async function getRoute (route) {
     loadingRoute.value = true
     switchTab('route-info')
-    const url = `${apiBaseUrl}/api/embedded/gyms/${props.gym.id}/gym_routes/${route.id}.json`
-    const reponse = await fetch(url)
-    if (!reponse.ok) {
-      throw new Error(`Statut de réponse : ${reponse.status}`)
-    }
-    const resultat = await reponse.json()
-    gymRoute.value = await resultat
+    gymRoute.value = await oblykApi.get(`/api/embedded/gyms/${props.gym.id}/gym_routes/${route.id}.json`)
     loadingRoute.value = false
   }
 

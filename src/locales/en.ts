@@ -16,6 +16,7 @@ export default {
     },
   },
   gymRoute: {
+    backToList: 'BACK TO THE LIST OF ROUTES',
     anchor_number: 'Anchor n°',
   },
   climbingStyle: {

@@ -205,7 +205,7 @@
       })
     }
 
-    for (const asset of props.gym.assets) {
+    for (const asset of props.gym.gym_three_d_elements) {
       loader.load(asset.gym_three_d_asset.three_d_gltf_url, gltf => {
         const object = gltf.scene
 

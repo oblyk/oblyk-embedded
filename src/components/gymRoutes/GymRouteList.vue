@@ -61,8 +61,9 @@
   import { useI18n } from 'vue-i18n'
   import GymRouteListItem from '@/components/gymRoutes/GymRouteListItem'
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar'
+  import { oblykApi } from '@/services/oblykApi.js'
+
   const { t } = useI18n()
-  const apiBaseUrl = import.meta.env.VITE_OBLYK_API_BASE_URL
 
   const props = defineProps({
     gym: Object,
@@ -93,27 +94,22 @@
   }
 
   async function fetchRoutes () {
-    const url = `${apiBaseUrl}/api/embedded/gyms/${props.gym.id}/gym_routes.json`
-    const params = new URLSearchParams()
-    params.append('sort', props.sort)
-    params.append('page', page.value)
+    const params = {
+      sort: props.sort,
+      page: page.value,
+    }
 
     loadingNextPage.value = true
 
     if (props.activeGymSpace) {
-      params.append('gym_space_id', props.activeGymSpace.id)
+      params.gym_space_id = props.activeGymSpace.id
     }
 
     if (props.activeGymSector) {
-      params.append('gym_sector_id', props.activeGymSector.id)
+      params.gym_sector_id = props.activeGymSector.id
     }
 
-    const reponse = await fetch(`${url}?${params}`)
-    if (!reponse.ok) {
-      throw new Error(`Statut de réponse : ${reponse.status}`)
-    }
-    const resultat = await reponse.json()
-    const routes = await resultat
+    const routes = await oblykApi.get(`/api/embedded/gyms/${props.gym.id}/gym_routes.json`, params)
 
     if (routes.length < 25) {
       noMorePages.value = true
