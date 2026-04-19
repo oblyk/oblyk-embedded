@@ -12,7 +12,6 @@ async function handleResponse (response) {
     return null
   }
   const data = await response.json()
-  console.log(new Jsona().deserialize(data))
   return new Jsona().deserialize(data)
 }
 
@@ -21,7 +20,7 @@ async function request (endpoint, params = {}, options = {}) {
   for (const key in params) {
     urlParams.append(key, params[key])
   }
-  if (params.length > 0) {
+  if (urlParams.size > 0) {
     urlParams = `?${urlParams}`
   }
   const response = await fetch(`${apiBaseUrl}${endpoint}${urlParams}`, { ...options })

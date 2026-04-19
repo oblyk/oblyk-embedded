@@ -12,7 +12,10 @@
   <div>
     <v-skeleton-loader v-if="loading" type="card-avatar" />
     <div v-else>
-      <gym-route-picture :gym-route="gymRoute" />
+      <gym-route-picture
+        v-if="gymRoute.cover_metadata"
+        :gym-route="gymRoute"
+      />
       <gym-route-list-item :clickable="false" :gym-route="gymRoute" />
       <div class="border rounded px-2 py-1">
         <div class="d-flex align-center justify-space-between">
