@@ -275,6 +275,7 @@
     spaceName.outlineWidth = 0.04
     spaceName.outlineBlur = 0
     spaceName.outlineOpacity = 0.5
+    spaceName.sdfGlyphSize = 16
     spaceName.position.x = center.x + size.x * (centerX - 50) / 100
     spaceName.position.z = center.z + size.z * (centerZ - 50) / 100
     spaceName.position.y = center.y * 2 + (gapY + 0.1) - Number.parseFloat(sector.three_d_elevated)
