@@ -17,6 +17,7 @@ export default {
     get: 'Get',
     getOnMyPhone: 'Get on my phone',
     seeOnMyPhone: 'See on my phone',
+    replay: 'Replay',
   },
   gym: {
     opened_at: 'Opening date',
@@ -33,6 +34,9 @@ export default {
   gymRoute: {
     backToList: 'BACK TO THE LIST OF ROUTES',
     anchor_number: 'Anchor n°',
+    videos: {
+      noVideos: 'There are no videos for this line yet',
+    },
   },
   climbingStyle: {
     boulder: 'Boulder',

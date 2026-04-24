@@ -18,6 +18,7 @@ export default {
     get: 'Récupérer',
     getOnMyPhone: 'Récupérer sur mon tél',
     seeOnMyPhone: 'Voir sur mon tél',
+    replay: 'Rejouer',
   },
   gym: {
     opened_at: 'Date d\'ouverture',
@@ -34,6 +35,9 @@ export default {
   gymRoute: {
     backToList: 'RETOUR À LA LISTE DES VOIES',
     anchor_number: 'Relais n°',
+    videos: {
+      noVideos: 'Il n\'y a pas encore de vidéo sur cette ligne',
+    },
   },
   climbingStyle: {
     boulder: 'Bloc',
