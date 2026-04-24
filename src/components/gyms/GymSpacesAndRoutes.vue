@@ -64,7 +64,6 @@
         <!-- SELECTED ROUTE (SECOND PANEL) -->
         <v-tabs-window-item value="route-info">
           <gym-route-info
-            :key="`gym-route-index-${gymRoute.id}`"
             :gym-route="gymRoute"
             :loading="loadingRoute"
           />

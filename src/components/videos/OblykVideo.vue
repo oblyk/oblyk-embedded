@@ -119,7 +119,7 @@
   const thumbnail = ref(true)
   const play = ref(false)
   const fullScreen = ref(false)
-  const currentTime = ref()
+  const currentTime = ref(0)
   const duration = ref(null)
   const muted = ref(true)
   const ended = ref(false)

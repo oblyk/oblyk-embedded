@@ -1,35 +1,38 @@
 <template>
-  <v-tabs
-    v-model="gymRouteTab"
-    class="mb-2 font-weight-medium"
-    grow
-    inset
-  >
-    <v-tab
-      class="px-0"
-      style="min-width: 0"
-      @click.stop="back"
+  <v-skeleton-loader v-if="loading" type="actions, card-avatar" />
+  <div v-else>
+    <v-tabs
+      v-model="gymRouteTab"
+      class="mb-2 font-weight-medium"
+      grow
+      inset
     >
-      <v-icon>mdi-arrow-left</v-icon>
-    </v-tab>
-    <v-tab prepend-icon="mdi-information" value="info">
-      Infos
-    </v-tab>
-    <v-tab prepend-icon="mdi-play-circle" value="videos">
-      Videos
-      <v-chip
-        v-if="gymRoute?.videos?.length > 0"
-        class="ml-2 font-weight-bold"
-        color="#6200EA"
+      <v-tab
+        class="px-0"
+        style="min-width: 0"
+        @click.stop="back"
       >
-        {{ gymRoute?.videos?.length }}
-      </v-chip>
-    </v-tab>
-  </v-tabs>
-  <v-tabs-window v-model="gymRouteTab">
-    <v-tabs-window-item value="info">
-      <v-skeleton-loader v-if="loading" type="card-avatar" />
-      <div v-else>
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-tab>
+      <v-tab prepend-icon="mdi-information" value="info">
+        Infos
+      </v-tab>
+      <v-tab prepend-icon="mdi-play-circle" value="videos">
+        Videos
+        <v-chip
+          v-if="gymRoute?.videos?.length > 0"
+          class="ml-2 font-weight-bold"
+          color="#6200EA"
+        >
+          {{ gymRoute?.videos?.length }}
+        </v-chip>
+      </v-tab>
+    </v-tabs>
+    <v-tabs-window v-model="gymRouteTab">
+      <v-tabs-window-item
+        style="max-height: calc(100vh - 95px); overflow-y: auto; scrollbar-width: none"
+        value="info"
+      >
         <gym-route-picture
           v-if="gymRoute.cover_metadata"
           :gym-route="gymRoute"
@@ -53,13 +56,19 @@
         <div class="text-center mt-2">
           <see-on-oblyk-btn :url="gymRoute.app_path" />
         </div>
-      </div>
-    </v-tabs-window-item>
+      </v-tabs-window-item>
 
-    <v-tabs-window-item value="videos">
-      <gym-route-video-list :videos="gymRoute?.videos ?? []" />
-    </v-tabs-window-item>
-  </v-tabs-window>
+      <v-tabs-window-item
+        style="max-height: calc(100vh - 95px); overflow-y: auto; scrollbar-width: none"
+        value="videos"
+      >
+        <gym-route-video-list
+          :key="`gym-route-index-${gymRoute.id}`"
+          :videos="gymRoute?.videos ?? []"
+        />
+      </v-tabs-window-item>
+    </v-tabs-window>
+  </div>
 </template>
 
 <script setup>
