@@ -51,19 +51,16 @@
       v-if="noMorePages"
       class="text-center text-disabled pt-4 pb-12"
     >
-      {{ t('endOfList') }}
+      {{ $t('endOfList') }}
     </p>
   </div>
 </template>
 
 <script setup>
   import { onMounted, ref, watch } from 'vue'
-  import { useI18n } from 'vue-i18n'
   import GymRouteListItem from '@/components/gymRoutes/GymRouteListItem'
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar'
   import { oblykApi } from '@/services/oblykApi.js'
-
-  const { t } = useI18n()
 
   const props = defineProps({
     gym: Object,

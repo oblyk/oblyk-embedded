@@ -6,16 +6,14 @@
       class="mr-1"
       :path="ClimbingStyleIcons[style]"
       :size="18"
-      :title="t(`climbingStyle.${style}`)"
+      :title="$t(`climbingStyle.${style}`)"
     />
   </div>
 </template>
 
 <script setup>
-  import { useI18n } from 'vue-i18n'
   import SvgIcon from '@/components/ui/SvgIcon.vue'
   import { ClimbingStyleIcons } from '@/composables/useClimbingStyleIcons.js'
-  const { t } = useI18n()
 
   const props = defineProps({ gymRoute: Object })
 

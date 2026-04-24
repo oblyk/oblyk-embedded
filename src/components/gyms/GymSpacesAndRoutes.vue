@@ -72,15 +72,12 @@
 
 <script setup>
   import { inject, provide, ref, watch } from 'vue'
-  import { useI18n } from 'vue-i18n'
   import GymRouteInfo from '@/components/gymRoutes/GymRouteInfo.vue'
   import GymRouteList from '@/components/gymRoutes/GymRouteList.vue'
   import GymRoutesSort from '@/components/gymRoutes/GymRoutesSort.vue'
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar.vue'
   import GymSpacesSelector from '@/components/gymSpaces/GymSpacesSelector.vue'
   import { oblykApi } from '@/services/oblykApi.js'
-
-  const { t } = useI18n()
 
   const props = defineProps({ gym: Object, activeGymSpace: Object, activeGymSector: Object })
   const tab = ref('route-list')

@@ -6,8 +6,9 @@
 
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
-import Gym from '@/pages/gym.vue'
 import Index from '@/pages/index.vue'
+
+const Gym = () => import('@/pages/gym.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

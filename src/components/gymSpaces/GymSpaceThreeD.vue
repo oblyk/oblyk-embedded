@@ -11,7 +11,7 @@
         <div>
           <animate-oblyk-logo color="#6200EA" stroke-linejoin="round" />
           <p class="font-weight-medium text-disabled mt-0">
-            {{ t('loading3D') }}
+            {{ $t('loading3D') }}
           </p>
         </div>
       </div>
@@ -25,7 +25,7 @@
         <div>
           <animate-oblyk-logo color="#6200EA" stroke-linejoin="round" />
           <p class="font-weight-medium text-disabled mt-0">
-            {{ t('loading3D') }}
+            {{ $t('loading3D') }}
           </p>
         </div>
       </div>
@@ -39,11 +39,9 @@
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
   import { Text } from 'troika-three-text'
   import { inject, onMounted, ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
   import AnimateOblykLogo from '@/components/ui/AnimateOblykLogo.vue'
   import { useThreeJs } from '@/composables/useThreeJs.js'
 
-  const { t } = useI18n()
   const spaceObject = ref(null)
   const sectorBoundingBoxes = ref([])
   const sectorLineSegments = ref([])

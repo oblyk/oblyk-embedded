@@ -20,7 +20,7 @@
           {{ itemValue }} {{ itemSuffix }}
         </span>
         <span v-else class="text--disabled">
-          {{ t('noInformation') }}
+          {{ $t('noInformation') }}
         </span>
       </div>
     </div>
@@ -29,9 +29,7 @@
 
 <script setup>
   import { computed, useSlots } from 'vue'
-  import { useI18n } from 'vue-i18n'
   const slots = useSlots()
-  const { t } = useI18n()
 
   const props = defineProps({
     icon: String,

@@ -30,7 +30,7 @@
       <gym-route-climbing-simple-style-icons :gym-route="gymRoute" />
       <div class="mr-auto">
         <small v-if="gymRoute.anchor_number" class="d-block">
-          {{ t('gymRoute.anchor_number') }}{{ gymRoute.anchor_number }}
+          {{ $t('gymRoute.anchor_number') }}{{ gymRoute.anchor_number }}
         </small>
       </div>
 
@@ -92,12 +92,10 @@
 </template>
 <script setup>
   import { inject } from 'vue'
-  import { useI18n } from 'vue-i18n'
   import GymRouteAvatar from '@/components/gymRoutes/GymRouteAvatar'
   import GymRouteClimbingSimpleStyleIcons from '@/components/gymRoutes/GymRouteClimbingSimpleStyleIcons'
   import GymRouteGradeAndPoint from '@/components/gymRoutes/GymRouteGradeAndPoint'
   import GymRouteSubLevel from '@/components/gymRoutes/GymRouteSubLevel'
-  const { t } = useI18n()
 
   const props = defineProps({ gymRoute: Object, clickable: { type: Boolean, default: true } })
   const getRoute = inject('GymSpaceAndRoutes:getRoute')

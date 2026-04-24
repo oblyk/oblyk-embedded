@@ -58,14 +58,14 @@
           prepend-icon="mdi-format-list-text"
           value="active-side--left"
         >
-          {{ t('liste') }}
+          {{ $t('liste') }}
         </v-btn>
 
         <v-btn
           prepend-icon="mdi-map"
           value="active-side--right"
         >
-          {{ t('map') }}
+          {{ $t('map') }}
         </v-btn>
       </v-btn-toggle>
     </div>
@@ -77,7 +77,7 @@
     <div class="text-center">
       <animate-oblyk-logo color="#6200EA" stroke-linejoin="round" />
       <p class="font-weight-medium text-disabled mt-0">
-        {{ t('loadingGym') }}
+        {{ $t('loadingGym') }}
       </p>
     </div>
   </div>
@@ -86,16 +86,62 @@
     :href="gym && mode === 'iframe' ? `https://oblyk.org${gym.app_path}` : null"
     size="small"
     target="_blank"
+    @click="mode !== 'iframe' ? openOblykDialog() : null"
   >
     <oblyk-logo-name />
   </v-chip>
+  <v-dialog
+    v-model="oblykDialog"
+    max-width="400"
+    persistent
+  >
+    <v-card loading>
+      <template #loader>
+        <v-progress-linear color="#6200EA" :model-value="oblykDialogProgressToClose" />
+      </template>
+      <v-card-title class="font-weight-medium d-flex align-center mt-1">
+        <svg-icon class="mr-2" :path="oblykLogo" size="30" />
+        Oblyk
+      </v-card-title>
+      <v-card-text class="py-1">
+        <p class="text-center font-weight-medium">
+          {{ $t('getGymOnPhone', { name: gym?.name }) }}
+        </p>
+        <div class="d-flex justify-center">
+          <div class="border rounded-lg pa-5 pb-4 text-center bg-white">
+            <qrcode-vue size="200" :value="gym?.app_path" />
+          </div>
+        </div>
+        <p class="text-center">
+          <v-chip class="ma-1" prepend-icon="mdi-bell-ring">
+            {{ $t('stayUpDate') }}
+          </v-chip>
+          <v-chip class="ma-1" prepend-icon="mdi-check-all">
+            {{ $t('trackYourProgress') }}
+          </v-chip>
+          <v-chip class="ma-1" prepend-icon="mdi-heart">
+            {{ $t('shareOpinion') }}
+          </v-chip>
+        </p>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn
+          class="font-weight-medium"
+          :text="$t('actions.close')"
+          variant="text"
+          @click="closeOblykDialog"
+        />
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
+  import QrcodeVue from 'qrcode.vue'
   import { onBeforeMount, provide, ref, watch } from 'vue'
-  import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
   import { useTheme } from 'vuetify'
+  import { oblykLogo } from '@/assets/oblyk-icons/index.js'
   import GymSpacesAndRoutes from '@/components/gyms/GymSpacesAndRoutes.vue'
   import GymThreeD from '@/components/gyms/GymThreeD.vue'
   import GymSpaceList from '@/components/gymSpaces/GymSpaceList.vue'
@@ -103,9 +149,9 @@
   import GymSpaceThreeD from '@/components/gymSpaces/GymSpaceThreeD.vue'
   import AnimateOblykLogo from '@/components/ui/AnimateOblykLogo.vue'
   import OblykLogoName from '@/components/ui/OblykLogoName.vue'
+  import SvgIcon from '@/components/ui/SvgIcon.vue'
   import { oblykApi } from '@/services/oblykApi.js'
 
-  const { t } = useI18n()
   const theme = useTheme()
   const route = useRoute()
 
@@ -115,6 +161,9 @@
   const mode = ref('iframe')
   const activeGymSpace = ref(null)
   const activeGymSector = ref(null)
+  const oblykDialog = ref(false)
+  const oblykDialogProgressToClose = ref(100)
+  const oblykDialogTimeInterval = ref(null)
 
   watch(() => route.params.id, fetchData, { immediate: true })
   provide('Gym:switchGymSpace', switchGymSpace)
@@ -169,6 +218,23 @@
         document.querySelector('.v-application').style.background = `linear-gradient(${linearDeg}deg, ${bgColor?.join(', ')})`
       }
     }
+  }
+
+  function openOblykDialog () {
+    clearInterval(oblykDialogTimeInterval.value)
+    oblykDialogProgressToClose.value = 100
+    oblykDialog.value = true
+    oblykDialogTimeInterval.value = setInterval(() => {
+      oblykDialogProgressToClose.value -= 1
+      if (oblykDialogProgressToClose.value <= 0) {
+        closeOblykDialog()
+      }
+    }, 150)
+  }
+
+  function closeOblykDialog () {
+    clearInterval(oblykDialogTimeInterval.value)
+    oblykDialog.value = false
   }
 </script>
 

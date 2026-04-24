@@ -7,6 +7,18 @@ export default {
   map: 'Plan',
   loadingGym: 'Chargement de salle ...',
   loading3D: 'Chargement du 3D ...',
+  seeOnOblyk: 'Voir sur Oblyk',
+  scanThisCode: 'Scan ce qrcode pour voir cet élément sur ton téléphone.',
+  getGymOnPhone: 'Retrouve {name} sur ton téléphone !',
+  stayUpDate: 'Restez informé des dernières actualités',
+  trackYourProgress: 'Suis ta progression',
+  shareOpinion: 'Donnes ton avis',
+  actions: {
+    close: 'Fermer',
+    get: 'Récupérer',
+    getOnMyPhone: 'Récupérer sur mon tél',
+    seeOnMyPhone: 'Voir sur mon tél',
+  },
   gym: {
     opened_at: 'Date d\'ouverture',
     sector: 'Secteur',

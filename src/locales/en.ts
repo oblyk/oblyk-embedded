@@ -7,6 +7,17 @@ export default {
   map: 'Map',
   loadingGym: 'Loading climbing gym...',
   loading3D: 'Loading 3D ...',
+  seeOnOblyk: 'See on Oblyk',
+  scanThisCode: 'Scan this QR code to view this item on your phone.',
+  stayUpDate: 'Stay up to date with the latest news',
+  trackYourProgress: 'Track your progress',
+  shareOpinion: 'Share your opinion',
+  actions: {
+    close: 'Close',
+    get: 'Get',
+    getOnMyPhone: 'Get on my phone',
+    seeOnMyPhone: 'See on my phone',
+  },
   gym: {
     opened_at: 'Opening date',
     sector: 'Sector',

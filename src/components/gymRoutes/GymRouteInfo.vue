@@ -6,7 +6,7 @@
       prepend-icon="mdi-arrow-left"
       @click="switchTab('route-list')"
     >
-      {{ t('gymRoute.backToList') }}
+      {{ $t('gymRoute.backToList') }}
     </v-btn>
   </div>
   <div>
@@ -32,18 +32,20 @@
           </div>
         </div>
       </div>
+      <div class="text-center mt-2">
+        <see-on-oblyk-btn :url="gymRoute.app_path" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
   import { inject } from 'vue'
-  import { useI18n } from 'vue-i18n'
   import GymRouteListItem from '@/components/gymRoutes/GymRouteListItem.vue'
   import GymRoutePicture from '@/components/gymRoutes/GymRoutePicture.vue'
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar.vue'
+  import SeeOnOblykBtn from '@/components/ui/SeeOnOblykBtn.vue'
 
-  const { t } = useI18n()
   const switchTab = inject('GymSpaceAndRoutes:switchTab')
   const props = defineProps({ gym: Object, gymRoute: Object, gymSpace: Object, loading: Boolean })
 </script>
