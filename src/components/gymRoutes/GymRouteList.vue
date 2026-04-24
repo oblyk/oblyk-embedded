@@ -89,6 +89,7 @@
   function resetAndFetchRoutes () {
     loadingRoutes.value = true
     gymRoutes.value = []
+    noMorePages.value = false
     page.value = 1
     fetchRoutes()
   }
