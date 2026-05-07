@@ -278,7 +278,7 @@
         left: 0;
         opacity: 1;
         transition: left 0.3s, opacity 0.3s;
-        z-index: 1;
+        z-index: 500;
       }
       .embedded-gym-right-side {
         width: 100vw;
@@ -286,7 +286,7 @@
     }
     .embedded-gym-toggle {
       display: block;
-      z-index: 2;
+      z-index: 510;
     }
     &.active-side--right {
       .embedded-gym-left-side {
