@@ -265,8 +265,8 @@
 .powered-by-oblyk {
   border-color: rgba(150, 150, 150, 0.5);
   position: fixed;
-  bottom: 5px;
-  right: 5px;
+  bottom: 8px;
+  right: 8px;
 }
 @media (max-width: 800px) {
   .embedded-gym {
