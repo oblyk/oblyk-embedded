@@ -47,7 +47,6 @@
   const sectorLineSegments = ref([])
   const loadingSpace = ref(true)
   const highlightSectorId = ref(false)
-  const disableClick = ref(false)
 
   const {
     TDArea,
@@ -70,6 +69,7 @@
     removeObject,
     calculatePointerPosition,
     threeDLabels,
+    disableClick,
     raycaster,
     pointer,
   } = useThreeJs()
