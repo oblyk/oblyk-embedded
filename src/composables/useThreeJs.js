@@ -22,8 +22,9 @@ export function useThreeJs () {
   const objectsSceneSize = ref(null)
   const autoRotate = ref(false)
   const threeDLabels = ref([])
+  let autoRotateTimeout = null
 
-  // ─── Lifecycle ────────────────────────────────────────────────────────────
+  // Lifecycle
 
   onBeforeUnmount(() => {
     if (orbitControls.value) {
@@ -43,7 +44,7 @@ export function useThreeJs () {
     document.removeEventListener('wheel', addPointerInsensitiveClass)
   })
 
-  // ─── Methods ──────────────────────────────────────────────────────────────
+  // Methods
 
   function resizeThreeJsContainer () {
     const aspect = TDArea.value.offsetWidth / TDArea.value.offsetHeight
@@ -76,10 +77,15 @@ export function useThreeJs () {
   function startDragging () {
     isDraggingScene.value = true
     orbitControls.value.autoRotate = false
+    clearTimeout(autoRotateTimeout)
   }
 
   function endDragging () {
     isDraggingScene.value = false
+    autoRotateTimeout = setTimeout(() => {
+      autoRotate.value = false
+      autoRotateScene()
+    }, 10_000)
   }
 
   function renderScene () {
@@ -193,7 +199,7 @@ export function useThreeJs () {
     })
   }
 
-  function autoRotateScene (autoRotateSpeed = -1) {
+  function autoRotateScene (autoRotateSpeed = -0.6) {
     if (!autoRotate.value) {
       orbitControls.value.autoRotate = true
       orbitControls.value.autoRotateSpeed = autoRotateSpeed
@@ -335,7 +341,7 @@ export function useThreeJs () {
     scene.value.add(plane)
   }
 
-  // ─── Expose ───────────────────────────────────────────────────────────────
+  // Expose
 
   return {
     // State
