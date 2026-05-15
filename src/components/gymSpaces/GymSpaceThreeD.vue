@@ -272,9 +272,9 @@
     spaceName.anchorX = 'center'
     spaceName.anchorY = 'middle'
     spaceName.outlineColor = 'black'
-    spaceName.outlineWidth = 0.04
+    spaceName.outlineWidth = 0.02
     spaceName.outlineBlur = 0
-    spaceName.outlineOpacity = 0.5
+    spaceName.outlineOpacity = 1
     spaceName.sdfGlyphSize = 16
     spaceName.position.x = center.x + size.x * (centerX - 50) / 100
     spaceName.position.z = center.z + size.z * (centerZ - 50) / 100

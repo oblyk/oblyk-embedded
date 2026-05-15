@@ -182,7 +182,7 @@
         spaceName.anchorX = 'center'
         spaceName.anchorY = 'middle'
         spaceName.outlineColor = 'black'
-        spaceName.outlineWidth = 0.07
+        spaceName.outlineWidth = 0.06
         spaceName.outlineBlur = 0
         spaceName.outlineOpacity = 1
         spaceName.sdfGlyphSize = 16
