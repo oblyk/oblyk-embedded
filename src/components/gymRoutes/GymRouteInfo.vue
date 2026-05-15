@@ -10,7 +10,7 @@
     >
       <v-tab
         class="px-0"
-        style="min-width: 0"
+        style="min-width: 0; max-width: 48px"
         @click.stop="back"
       >
         <v-icon>mdi-arrow-left</v-icon>
@@ -18,7 +18,11 @@
       <v-tab prepend-icon="mdi-information" value="info">
         Infos
       </v-tab>
-      <v-tab prepend-icon="mdi-play-circle" value="videos">
+      <v-tab
+        v-if="gymRoute?.videos?.length > 0"
+        prepend-icon="mdi-play-circle"
+        value="videos"
+      >
         Videos
         <v-chip
           v-if="gymRoute?.videos?.length > 0"
