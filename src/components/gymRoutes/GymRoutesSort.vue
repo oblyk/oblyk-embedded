@@ -3,13 +3,13 @@
     <template #activator="{ props }">
       <v-btn
         v-bind="props"
-        class="pl-1"
+        class="pl-1 sort-routes-btn"
         elevation="0"
         text
       >
         <v-icon class="mr-3">mdi-sort</v-icon>
         {{ $t(`gym.routeSorts.${routesSort}`) }}
-        <v-icon class="ml-2">mdi-menu-down</v-icon>
+        <v-icon class="ml-auto">mdi-menu-down</v-icon>
       </v-btn>
     </template>
     <v-list>
