@@ -30,6 +30,7 @@
     </v-tabs>
     <v-tabs-window v-model="gymRouteTab">
       <v-tabs-window-item
+        class="pb-16"
         style="max-height: calc(100vh - 95px); overflow-y: auto; scrollbar-width: none"
         value="info"
       >
@@ -59,6 +60,7 @@
       </v-tabs-window-item>
 
       <v-tabs-window-item
+        class="pb-16"
         style="max-height: calc(100vh - 95px); overflow-y: auto; scrollbar-width: none"
         value="videos"
       >
