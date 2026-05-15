@@ -4,7 +4,7 @@
     <v-tabs
       v-model="gymRouteTab"
       class="mb-2 font-weight-medium oblyk-tabs"
-      color="#6200ea"
+      :color="theme.current.value.dark ? '#ffffff' : '#6200ea'"
       grow
       inset
     >
@@ -27,7 +27,7 @@
         <v-chip
           v-if="gymRoute?.videos?.length > 0"
           class="ml-2 font-weight-bold"
-          color="#6200EA"
+          :color="theme.current.value.dark ? '#ffffff' : '#6200ea'"
         >
           {{ gymRoute?.videos?.length }}
         </v-chip>
@@ -84,6 +84,7 @@
 
 <script setup>
   import { inject, ref } from 'vue'
+  import { useTheme } from 'vuetify'
   import GymRouteListItem from '@/components/gymRoutes/GymRouteListItem.vue'
   import GymRoutePicture from '@/components/gymRoutes/GymRoutePicture.vue'
   import GymRouteVideoList from '@/components/gymRoutes/GymRouteVideoList.vue'
@@ -92,6 +93,7 @@
 
   const switchTab = inject('GymSpaceAndRoutes:switchTab')
   const props = defineProps({ gym: Object, gymRoute: Object, gymSpace: Object, loading: Boolean })
+  const theme = useTheme()
 
   const gymRouteTab = ref('info')
 
