@@ -84,8 +84,8 @@ export function useThreeJs () {
     isDraggingScene.value = false
     autoRotateTimeout = setTimeout(() => {
       autoRotate.value = false
-      autoRotateScene()
-    }, 10_000)
+      autoRotateScene(-0.4)
+    }, 1000)
   }
 
   function renderScene () {
