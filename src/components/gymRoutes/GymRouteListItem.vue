@@ -61,20 +61,6 @@
         {{ gymRoute.videos_count || 0 }}
       </strong>
 
-      <!-- comments -->
-      <strong
-        v-if="gymRoute.all_comments_count || 0 !== 0"
-        class="text-disabled"
-      >
-        <v-icon
-          class="ml-2 text-disabled vertical-align-sub"
-          size="small"
-        >
-          mdi-comment
-        </v-icon>
-        {{ gymRoute.all_comments_count || 0 }}
-      </strong>
-
       <!-- Ascents -->
       <strong
         v-if="gymRoute.ascents_count || 0 !== 0"
