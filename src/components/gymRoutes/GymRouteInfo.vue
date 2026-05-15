@@ -3,7 +3,8 @@
   <div v-else>
     <v-tabs
       v-model="gymRouteTab"
-      class="mb-2 font-weight-medium"
+      class="mb-2 font-weight-medium oblyk-tabs"
+      color="#6200ea"
       grow
       inset
     >
@@ -38,7 +39,11 @@
           v-if="gymRoute.cover_metadata"
           :gym-route="gymRoute"
         />
-        <gym-route-list-item :clickable="false" :gym-route="gymRoute" />
+        <gym-route-list-item
+          :clickable="false"
+          context="route-info"
+          :gym-route="gymRoute"
+        />
         <div class="border rounded px-2 py-1">
           <div class="d-flex align-center justify-space-between">
             <div class="font-weight-medium">

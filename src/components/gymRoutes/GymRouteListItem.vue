@@ -7,6 +7,7 @@
     <template #prepend>
       <gym-route-avatar
         class="mr-2"
+        :context="context"
         :gym-route="gymRoute"
       />
     </template>
@@ -97,6 +98,10 @@
   import GymRouteGradeAndPoint from '@/components/gymRoutes/GymRouteGradeAndPoint'
   import GymRouteSubLevel from '@/components/gymRoutes/GymRouteSubLevel'
 
-  const props = defineProps({ gymRoute: Object, clickable: { type: Boolean, default: true } })
+  const props = defineProps({
+    gymRoute: Object,
+    clickable: { type: Boolean, default: true },
+    context: { type: String, default: 'list' },
+  })
   const getRoute = inject('GymSpaceAndRoutes:getRoute')
 </script>
