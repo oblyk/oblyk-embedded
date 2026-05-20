@@ -9,14 +9,29 @@
           style="max-height: 100%; overflow-x: hidden"
           value="route-list"
         >
-          <div>
+          <div class="gym-spaces-selector-area">
             <!-- GYM SPACES SELECTOR -->
-            <gym-spaces-selector
-              v-if="gym.gym_spaces.length > 1"
-              :active-gym-space="activeGymSpace"
-              class="mb-3"
-              :gym="gym"
-            />
+            <div class="d-flex">
+              <div class="gym-spaces-selector-container">
+                <gym-spaces-selector
+                  v-if="gym.gym_spaces.length > 1"
+                  :active-gym-space="activeGymSpace"
+                  class="mb-3"
+                  :gym="gym"
+                />
+              </div>
+              <div class="gym-spaces-close-left-side">
+                <v-btn
+                  class="ml-auto"
+                  elevation="0"
+                  icon
+                  size="large"
+                  @click="toggleActiveSide('active-side--right')"
+                >
+                  <v-icon size="x-large">mdi-backburger</v-icon>
+                </v-btn>
+              </div>
+            </div>
 
             <!-- GYM SECTORS ACTIVE FILTER -->
             <div
@@ -89,6 +104,7 @@
   const loadingRoute = ref(true)
 
   const switchGymSector = inject('Gym:switchGymSector')
+  const toggleActiveSide = inject('Gym:toggleActiveSide')
 
   provide('GymSpaceAndRoutes:getRoute', getRoute)
   provide('GymSpaceAndRoutes:sortSwitch', sortSwitch)

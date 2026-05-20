@@ -168,6 +168,7 @@
   watch(() => route.params.id, fetchData, { immediate: true })
   provide('Gym:switchGymSpace', switchGymSpace)
   provide('Gym:switchGymSector', switchGymSector)
+  provide('Gym:toggleActiveSide', toggleActiveSide)
 
   onBeforeMount(() => {
     mode.value = route.query.mode ?? 'iframe'
@@ -201,6 +202,10 @@
   function switchGymSector (gymSector) {
     mobileToggle.value = 'active-side--left'
     activeGymSector.value = gymSector
+  }
+
+  function toggleActiveSide (side) {
+    mobileToggle.value = side
   }
 
   function setStyle () {
@@ -258,6 +263,16 @@
     bottom: 13px;
     left: calc(50% - 90px);
   }
+  .gym-spaces-selector-area {
+    .gym-spaces-selector-container {
+      width: 100%;
+    }
+    .gym-spaces-close-left-side {
+      display: none;
+      width: 56px;
+      padding-top: 6px
+    }
+  }
 }
 .loading-embedded-gym {
   height: 100vh;
@@ -292,6 +307,14 @@
       .embedded-gym-left-side {
         left: -100vw;
         opacity: 0;
+      }
+    }
+    .gym-spaces-selector-area {
+      .gym-spaces-selector-container {
+        width: calc(100% - 50px)
+      }
+      .gym-spaces-close-left-side {
+        display: block;
       }
     }
   }
