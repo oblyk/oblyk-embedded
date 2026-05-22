@@ -81,15 +81,14 @@
       </p>
     </div>
   </div>
-  <v-chip
+  <a
     class="powered-by-oblyk"
     :href="gym && mode === 'iframe' ? `https://oblyk.org${gym.app_path}` : null"
-    size="small"
     target="_blank"
     @click="mode !== 'iframe' ? openOblykDialog() : null"
   >
     <oblyk-logo-name />
-  </v-chip>
+  </a>
   <v-dialog
     v-model="oblykDialog"
     max-width="400"
@@ -280,6 +279,7 @@
 .powered-by-oblyk {
   border-color: rgba(150, 150, 150, 0.5);
   position: fixed;
+  cursor: pointer;
   bottom: 8px;
   right: 8px;
 }
