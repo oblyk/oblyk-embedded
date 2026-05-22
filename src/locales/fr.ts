@@ -4,6 +4,8 @@ export default {
   endOfList: 'Fin de la liste',
   noInformation: 'Non renseigné',
   liste: 'Liste',
+  showRouteList: 'Voir les voies',
+  showClimbingGym: 'Voir la salle',
   map: 'Plan',
   loadingGym: 'Chargement de salle ...',
   loading3D: 'Chargement du 3D ...',

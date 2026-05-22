@@ -4,6 +4,8 @@ export default {
   endOfList: 'End of list',
   noInformation: 'No information',
   liste: 'List',
+  showRouteList: 'Show route list',
+  showClimbingGym: 'Show gym',
   map: 'Map',
   loadingGym: 'Loading climbing gym...',
   loading3D: 'Loading 3D ...',

@@ -47,27 +47,15 @@
       </div>
     </div>
     <div class="embedded-gym-toggle">
-      <v-btn-toggle
-        v-model="mobileToggle"
+      <v-btn
         class="border"
         color="black"
-        mandatory
+        prepend-icon="mdi-format-list-text"
         rounded="xl"
+        @click="switchSide"
       >
-        <v-btn
-          prepend-icon="mdi-format-list-text"
-          value="active-side--left"
-        >
-          {{ $t('liste') }}
-        </v-btn>
-
-        <v-btn
-          prepend-icon="mdi-map"
-          value="active-side--right"
-        >
-          {{ $t('map') }}
-        </v-btn>
-      </v-btn-toggle>
+        {{ mobileToggle === 'active-side--left' ? $t('showClimbingGym') : $t('showRouteList') }}
+      </v-btn>
     </div>
   </div>
   <div
@@ -207,6 +195,10 @@
     mobileToggle.value = side
   }
 
+  function switchSide () {
+    mobileToggle.value = mobileToggle.value === 'active-side--left' ? 'active-side--right' : 'active-side--left'
+  }
+
   function setStyle () {
     // Theme (dark or light)
     const queryTheme = route.query.theme ?? 'light'
@@ -260,7 +252,7 @@
     display: none;
     position: absolute;
     bottom: 13px;
-    left: calc(50% - 90px);
+    left: calc(50% - 76px);
   }
   .gym-spaces-selector-area {
     .gym-spaces-selector-container {
@@ -286,6 +278,7 @@
   cursor: pointer;
   bottom: 8px;
   right: 8px;
+  height: 19px;
 }
 @media (max-width: 800px) {
   .embedded-gym {
@@ -321,9 +314,6 @@
         display: block;
       }
     }
-  }
-  .powered-by-oblyk {
-    top: 8px;
   }
 }
 </style>
