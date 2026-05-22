@@ -156,7 +156,7 @@
 
   const loading = ref(true)
   const gym = ref(null)
-  const mobileToggle = ref('active-side--left')
+  const mobileToggle = ref('active-side--right')
   const mode = ref('iframe')
   const activeGymSpace = ref(null)
   const activeGymSector = ref(null)
@@ -317,6 +317,9 @@
         display: block;
       }
     }
+  }
+  .powered-by-oblyk {
+    top: 8px;
   }
 }
 </style>
