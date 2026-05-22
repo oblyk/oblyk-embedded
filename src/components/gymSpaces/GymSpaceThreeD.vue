@@ -30,6 +30,24 @@
         </div>
       </div>
     </div>
+    <div
+      v-if="gymSpace"
+      v-show="!loadingSpace"
+      class="sectors-label-list"
+      :class="isDraggingScene ? '--in-dragging-scene' : null"
+    >
+      <div
+        v-for="(sector, sectorIndex) in gymSpace.gym_sectors"
+        v-show="sector.three_d_path"
+        :id="`sector-label-${sector.id}`"
+        :key="`sector-label-${sectorIndex}`"
+        class="sector-label-in-space text-truncate"
+        @click.stop="switchGymSector(sector)"
+        @mousemove="highlightSector(sector)"
+      >
+        {{ sector.name }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -37,7 +55,6 @@
   import * as THREE from 'three'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-  import { Text } from 'troika-three-text'
   import { inject, onMounted, ref } from 'vue'
   import AnimateOblykLogo from '@/components/ui/AnimateOblykLogo.vue'
   import { useThreeJs } from '@/composables/useThreeJs.js'
@@ -47,6 +64,7 @@
   const sectorLineSegments = ref([])
   const loadingSpace = ref(true)
   const highlightSectorId = ref(false)
+  const domLabels = {}
 
   const {
     TDArea,
@@ -55,6 +73,7 @@
     renderer,
     edgeColor,
     orbitControls,
+    isDraggingScene,
     buildGroundPlan,
     addShadowLight,
     fitCameraToObjects,
@@ -68,11 +87,10 @@
     autoRotateScene,
     removeObject,
     calculatePointerPosition,
-    threeDLabels,
     disableClick,
     raycaster,
     pointer,
-  } = useThreeJs()
+  } = useThreeJs(updateLabelsPosition)
 
   const props = defineProps({ gym: Object, gymSpace: Object })
 
@@ -249,39 +267,6 @@
     lineSegments.userData = { sector }
     sectorLineSegments.value.push(lineSegments)
 
-    // SECTOR TEXT NAME
-    const box = new THREE.Box3().setFromObject(boundingBox)
-    const size = new THREE.Vector3()
-    const center = new THREE.Vector3()
-    box.getSize(size)
-    box.getCenter(center)
-    let centerX, centerZ, gapY
-    if (sector.three_d_label_options) {
-      centerX = sector.three_d_label_options.x === null ? 50 : sector.three_d_label_options.x
-      centerZ = sector.three_d_label_options.z === null ? 50 : sector.three_d_label_options.z
-      gapY = sector.three_d_label_options.y === null ? 0.2 : sector.three_d_label_options.y
-    } else {
-      centerX = 50
-      centerZ = 50
-      gapY = 0.2
-    }
-
-    const spaceName = new Text()
-    spaceName.text = sector.name
-    spaceName.fontSize = 0.5
-    spaceName.anchorX = 'center'
-    spaceName.anchorY = 'middle'
-    spaceName.outlineColor = 'black'
-    spaceName.outlineWidth = 0.02
-    spaceName.outlineBlur = 0
-    spaceName.outlineOpacity = 1
-    spaceName.sdfGlyphSize = 16
-    spaceName.position.x = center.x + size.x * (centerX - 50) / 100
-    spaceName.position.z = center.z + size.z * (centerZ - 50) / 100
-    spaceName.position.y = center.y * 2 + (gapY + 0.1) - Number.parseFloat(sector.three_d_elevated)
-    scene.value.add(spaceName)
-    threeDLabels.value.push(spaceName)
-
     scene.value.add(lineSegments)
     renderScene()
   }
@@ -347,6 +332,40 @@
       renderScene()
     }
   }
+
+  function updateLabelsPosition () {
+    const tempV = new THREE.Vector3()
+    for (const sector of sectorBoundingBoxes.value) {
+      const box = new THREE.Box3().setFromObject(sector)
+      const size = new THREE.Vector3()
+      const center = new THREE.Vector3()
+      box.getSize(size)
+      box.getCenter(center)
+      let centerX, centerZ, gapY
+      if (sector.userData.sector.three_d_label_options) {
+        centerX = sector.userData.sector.three_d_label_options.x === null ? 50 : sector.userData.sector.three_d_label_options.x
+        centerZ = sector.userData.sector.three_d_label_options.z === null ? 50 : sector.userData.sector.three_d_label_options.z
+        gapY = sector.userData.sector.three_d_label_options.y === null ? 0.2 : sector.userData.sector.three_d_label_options.y
+      } else {
+        centerX = 50
+        centerZ = 50
+        gapY = 0.2
+      }
+      center.y = center.y * 2 + gapY - Number.parseFloat(sector.userData.sector.three_d_elevated)
+      center.x = center.x + size.x * (centerX - 50) / 100
+      center.z = center.z + size.z * (centerZ - 50) / 100
+      tempV.copy(center)
+      tempV.project(camera.value)
+
+      // convert the normalized position to CSS coordinates
+      const x = (tempV.x * 0.5 + 0.5) * TDArea.value.offsetWidth
+      const y = (tempV.y * -0.5 + 0.5) * TDArea.value.offsetHeight
+
+      domLabels[sector.userData.sector.id] ||= document.querySelector(`#sector-label-${sector.userData.sector.id}`)
+      domLabels[sector.userData.sector.id].style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`
+      domLabels[sector.userData.sector.id].style.zIndex = Math.trunc(-tempV.z * 0.5 + 0.5)
+    }
+  }
 </script>
 
 <style lang="scss">
@@ -358,7 +377,7 @@
       opacity: 0;
     }
   }
-  .sectors-list {
+  .sectors-label-list {
     position: absolute;
     top: 0;
     left: 0;
@@ -371,6 +390,8 @@
       top: 0;
       left: 0;
       white-space: nowrap;
+      font-weight: 500;
+      border-radius: 20px;
       background-color: rgba(255, 255, 255, 0.8);
       font-size: 0.6em;
       padding: 2px 5px;

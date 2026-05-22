@@ -30,6 +30,22 @@
         </div>
       </div>
     </div>
+    <div
+      v-show="!loadingSpaces"
+      class="spaces-label-list"
+      :class="isDraggingScene ? '--in-dragging-scene' : null"
+    >
+      <div
+        v-for="(space, spaceIndex) in gym.gym_spaces"
+        :id="`space-label-${space.id}`"
+        :key="`space-label-${spaceIndex}`"
+        class="rounded sector-label-in-spaces"
+        @click.stop="switchGymSpace(space)"
+        @mousemove.stop="glossySpace(space.id)"
+      >
+        {{ space.name }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -37,7 +53,6 @@
   import * as THREE from 'three'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-  import { Text } from 'troika-three-text'
   import { inject, onMounted, ref } from 'vue'
   import AnimateOblykLogo from '@/components/ui/AnimateOblykLogo.vue'
   import { useThreeJs } from '@/composables/useThreeJs.js'
@@ -49,6 +64,7 @@
   const loadingSpaces = ref(true)
   const activeSpaceId = ref(null)
   const switchGymSpace = inject('Gym:switchGymSpace')
+  const domLabels = {}
 
   const {
     TDArea,
@@ -57,6 +73,7 @@
     renderer,
     edgeColor,
     orbitControls,
+    isDraggingScene,
     buildGroundPlan,
     addShadowLight,
     fitCameraToObjects,
@@ -72,8 +89,7 @@
     raycaster,
     pointer,
     disableClick,
-    threeDLabels,
-  } = useThreeJs()
+  } = useThreeJs(updateLabelsPosition)
 
   onMounted(() => {
     TDArea.value = document.querySelector('#three-d-area')
@@ -159,38 +175,6 @@
 
         spaces.value.push(object)
         scene.value.add(object)
-
-        // Add space name
-        const size = new THREE.Vector3()
-        const box = new THREE.Box3().setFromObject(object)
-        const center = new THREE.Vector3()
-        box.getSize(size)
-        box.getCenter(center)
-        let centerX, centerZ, centerY
-        if (space.three_d_label_options) {
-          centerX = space.three_d_label_options.x === null ? 50 : space.three_d_label_options.x
-          centerZ = space.three_d_label_options.z === null ? 50 : space.three_d_label_options.z
-          centerY = space.three_d_label_options.y === null ? 50 : space.three_d_label_options.y
-        } else {
-          centerX = 50
-          centerZ = 50
-          centerY = 50
-        }
-        const spaceName = new Text()
-        spaceName.text = space.name
-        spaceName.fontSize = 0.9
-        spaceName.anchorX = 'center'
-        spaceName.anchorY = 'middle'
-        spaceName.outlineColor = 'black'
-        spaceName.outlineWidth = 0.06
-        spaceName.outlineBlur = 0
-        spaceName.outlineOpacity = 1
-        spaceName.sdfGlyphSize = 16
-        spaceName.position.x = center.x + size.x * (centerX - 50) / 100
-        spaceName.position.z = center.z + size.z * (centerZ - 50) / 100
-        spaceName.position.y = center.y * 2 - Number.parseFloat(space.three_d_position?.y || '0')
-        scene.value.add(spaceName)
-        threeDLabels.value.push(spaceName)
 
         // Center scene to all boxes
         if (spaceIndex === filteredSpaces.length) {
@@ -347,6 +331,40 @@
     renderScene()
   }
 
+  function updateLabelsPosition () {
+    const tempV = new THREE.Vector3()
+    for (const space of spaces.value) {
+      const box = new THREE.Box3().setFromObject(space)
+      const size = new THREE.Vector3()
+      const center = new THREE.Vector3()
+      box.getSize(size)
+      box.getCenter(center)
+      let centerX, centerZ, centerY
+      if (space.userData.space.three_d_label_options) {
+        centerX = space.userData.space.three_d_label_options.x === null ? 50 : space.userData.space.three_d_label_options.x
+        centerZ = space.userData.space.three_d_label_options.z === null ? 50 : space.userData.space.three_d_label_options.z
+        centerY = space.userData.space.three_d_label_options.y === null ? 50 : space.userData.space.three_d_label_options.y
+      } else {
+        centerX = 50
+        centerZ = 50
+        centerY = 50
+      }
+      center.x = center.x + size.x * (centerX - 50) / 100
+      center.z = center.z + size.z * (centerZ - 50) / 100
+      center.y = center.y * 2 + size.y * (centerY - 100) / 100 - Number.parseFloat(space.userData.space.three_d_position?.y || '0')
+      tempV.copy(center)
+      tempV.project(camera.value)
+
+      // convert the normalized position to CSS coordinates
+      const x = (tempV.x * 0.5 + 0.5) * TDArea.value.offsetWidth
+      const y = (tempV.y * -0.5 + 0.5) * TDArea.value.offsetHeight
+
+      domLabels[space.userData.space.id] ||= document.querySelector(`#space-label-${space.userData.space.id}`)
+      domLabels[space.userData.space.id].style.transform = `translate(-50%, -50%) translate(${x}px,${y}px)`
+      domLabels[space.userData.space.id].style.zIndex = Math.trunc(-tempV.z * 0.5 + 0.5)
+    }
+  }
+
   function goToSpace (event) {
     if (disableClick.value) {
       return
@@ -383,7 +401,7 @@
       opacity: 0;
     }
   }
-  .spaces-list {
+  .spaces-label-list {
     position: absolute;
     top: 0;
     left: 0;
@@ -391,15 +409,17 @@
     transition: opacity 0.2s;
     opacity: 1;
     .sector-label-in-spaces {
+      color: black;
       position: absolute;
       top: 0;
       left: 0;
       white-space: nowrap;
-      padding: 1px 5px;
-      box-sizing: border-box;
+      font-weight: 500;
+      border-radius: 20px;
       background-color: rgba(255, 255, 255, 0.8);
       font-size: 0.6em;
-      transition: background-color 0.2s;
+      padding: 2px 5px;
+      cursor: pointer;
     }
     &.--in-dragging-scene {
       opacity: 0.3;

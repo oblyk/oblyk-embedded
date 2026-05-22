@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { onBeforeUnmount, ref, toRaw } from 'vue'
 
-export function useThreeJs () {
+export function useThreeJs (updateLabelsPosition) {
   // State (équivalent de data())
   const TDArea = ref(null)
   const camera = ref(null)
@@ -85,11 +85,14 @@ export function useThreeJs () {
     autoRotateTimeout = setTimeout(() => {
       autoRotate.value = false
       orbitControls.value.autoRotate = true
-    }, 5000)
+    }, 8000)
   }
 
   function renderScene () {
     renderer.value.render(toRaw(scene.value), camera.value)
+    if (updateLabelsPosition) {
+      updateLabelsPosition()
+    }
   }
 
   function calculatePointerPosition (event) {
