@@ -272,6 +272,10 @@
       padding-top: 6px
     }
   }
+  .v-tabs--inset .v-tab__slider {
+    background: rgba(209, 196, 233, 0.4);
+    border-radius: 40px;
+  }
 }
 .loading-embedded-gym {
   height: 100vh;

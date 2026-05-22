@@ -5,17 +5,19 @@
       v-model="gymRouteTab"
       class="mb-2 font-weight-medium oblyk-tabs"
       :color="theme.current.value.dark ? '#ffffff' : '#6200ea'"
-      grow
       inset
     >
       <v-tab
         class="px-0"
-        style="min-width: 0; max-width: 48px"
+        style="min-width: 48px; max-width: 48px"
         @click.stop="back"
       >
         <v-icon>mdi-arrow-left</v-icon>
       </v-tab>
-      <v-tab prepend-icon="mdi-information" value="info">
+      <v-tab
+        prepend-icon="mdi-information"
+        value="info"
+      >
         Infos
       </v-tab>
       <v-tab
