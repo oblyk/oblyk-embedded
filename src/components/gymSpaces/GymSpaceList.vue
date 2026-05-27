@@ -1,6 +1,6 @@
 <template>
   <div
-    class="d-flex align-center justify-center ga-5 overflow-x-auto gym-space-plan-list"
+    class="d-flex align-center justify-lg-center justify-sm-start px-5 ga-5 overflow-x-auto gym-space-plan-list"
     style="height: 100vh"
   >
     <v-card
