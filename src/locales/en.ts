@@ -20,6 +20,12 @@ export default {
     getOnMyPhone: 'Get on my phone',
     seeOnMyPhone: 'See on my phone',
     replay: 'Replay',
+    selectSpaceFor: 'Select on an space to view the sectors',
+    selectSectorFor: {
+      sport_climbing: 'Select an sector to view the routes',
+      bouldering: 'Select an sector to view the boulders',
+      pan: 'Select an sector to view the boulders',
+    },
   },
   gym: {
     opened_at: 'Opening date',

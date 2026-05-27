@@ -21,6 +21,12 @@ export default {
     getOnMyPhone: 'Récupérer sur mon tél',
     seeOnMyPhone: 'Voir sur mon tél',
     replay: 'Rejouer',
+    selectSpaceFor: 'Sélectionnez un espace pour voir les secteurs',
+    selectSectorFor: {
+      sport_climbing: 'Sélectionnez un secteur pour voir les voies',
+      bouldering: 'Sélectionnez un secteur pour voir les blocs',
+      pan: 'Sélectionnez un secteur pour voir les blocs',
+    },
   },
   gym: {
     opened_at: 'Date d\'ouverture',

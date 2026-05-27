@@ -16,6 +16,11 @@
         v-if="gym"
         class="embedded-gym-right-side flex-grow-1"
       >
+        <div class="embedded-gym-clic-to-space">
+          {{
+            activeGymSpace === null ? $t('actions.selectSpaceFor') : $t(`actions.selectSectorFor.${activeGymSpace.climbing_type}`)
+          }}
+        </div>
         <keep-alive>
           <gym-three-d
             v-if="activeGymSpace === null && gym.representation_type === '3d'"
@@ -182,6 +187,9 @@
   }
 
   function switchGymSpace (gymSpace) {
+    if (activeGymSpace.value === gymSpace) {
+      mobileToggle.value = 'active-side--right'
+    }
     activeGymSector.value = null
     activeGymSpace.value = gymSpace
   }
@@ -254,6 +262,14 @@
     bottom: 13px;
     left: calc(50% - 76px);
   }
+  .embedded-gym-clic-to-space {
+    position: absolute;
+    top: 30px;
+    width: calc(100vw - 400px);
+    text-align: center;
+    font-weight: 800;
+    opacity: 0.2;
+  }
   .gym-spaces-selector-area {
     .gym-spaces-selector-container {
       width: 100%;
@@ -299,6 +315,9 @@
     .embedded-gym-toggle {
       display: block;
       z-index: 510;
+    }
+    .embedded-gym-clic-to-space {
+      width: 100vw;
     }
     &.active-side--right {
       .embedded-gym-left-side {
