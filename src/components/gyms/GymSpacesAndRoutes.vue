@@ -19,6 +19,24 @@
                   class="mb-3"
                   :gym="gym"
                 />
+                <div
+                  v-else
+                  class="text-no-wrap d-flex align-center"
+                >
+                  <v-avatar size="60">
+                    <v-img
+                      height="60"
+                      :src="imageVariant(gym.attachments.logo, { fit: 'scale-down', height: 100, width: 100 })"
+                      style="max-width: 60px"
+                      width="60"
+                    />
+                  </v-avatar>
+                  <h1
+                    class="text-truncate ml-3 font-weight-bold"
+                  >
+                    {{ gym.name }}
+                  </h1>
+                </div>
               </div>
               <div class="gym-spaces-close-left-side">
                 <v-btn
@@ -96,6 +114,7 @@
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar.vue'
   import GymSpacesSelector from '@/components/gymSpaces/GymSpacesSelector.vue'
   import { oblykApi } from '@/services/oblykApi.js'
+  import {imageVariant} from "@/composables/useImageVariant.js";
 
   const props = defineProps({ gym: Object, activeGymSpace: Object, activeGymSector: Object })
   const tab = ref('route-list')
