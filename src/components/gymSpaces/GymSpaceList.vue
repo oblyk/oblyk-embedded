@@ -6,6 +6,7 @@
     <v-card
       v-for="(gymSpace, gymSpaceIndex) in gym.gym_spaces"
       :key="`gym-space-${gymSpaceIndex}`"
+      style="min-width: 270px"
       @click="spaceSwitch(gymSpace)"
     >
       <v-img
