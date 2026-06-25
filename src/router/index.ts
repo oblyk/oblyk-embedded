@@ -9,6 +9,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Index from '@/pages/index.vue'
 
 const Gym = () => import('@/pages/gym.vue')
+const GymCustomisationIntegration = () => import('@/pages/gym-customisation-integration.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,10 @@ const router = createRouter({
     {
       path: '/gyms/:id/:name',
       component: Gym,
+    },
+    {
+      path: '/gyms/:id/:name/integration-customisation',
+      component: GymCustomisationIntegration,
     },
   ],
 })

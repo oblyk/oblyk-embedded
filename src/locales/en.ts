@@ -14,6 +14,7 @@ export default {
   stayUpDate: 'Stay up to date with the latest news',
   trackYourProgress: 'Track your progress',
   shareOpinion: 'Share your opinion',
+  preview: 'Preview',
   actions: {
     close: 'Close',
     get: 'Get',
@@ -21,6 +22,10 @@ export default {
     seeOnMyPhone: 'See on my phone',
     replay: 'Replay',
     selectSpaceFor: 'Select on an space to view the sectors',
+    addColor: 'Add a color',
+    applyBackground: 'Apply background',
+    copied: 'Copied !',
+    copy: 'Copy',
     selectSectorFor: {
       sport_climbing: 'Select an sector to view the routes',
       bouldering: 'Select an sector to view the boulders',
@@ -44,6 +49,41 @@ export default {
     anchor_number: 'Anchor n°',
     videos: {
       noVideos: 'There are no videos for this line yet',
+    },
+  },
+  gymCustomisation: {
+    title: 'Add my gym’s guide book',
+    intro: 'This interface allows you to seamlessly integrate your guide book into your website, or onto a tablet in your climbing gym <cite>(kiosk mode)</cite><br>The options you select here are not saved and will not affect either your guidebook on Oblyk or any previous integrations you may have created using this interface.',
+    where: 'Where would you like to include your guidebook?',
+    onMyWebSite: {
+      title: 'On my website',
+      hint: '* The Iframe mode allows you to integrate your climbing gym into your website.',
+    },
+    onMyPad: {
+      title: 'On a pad',
+      hint: '* Kiosk mode allows you to display a guidebook of your venue on a tablet in your venue.',
+    },
+    theme: 'Which theme would you like?',
+    background: 'Would you like to customise the background colour?',
+    customizeBackground: 'Customise my selection:',
+    colorIndex: 'Colour %{index}',
+    gradientDirection: 'Gradient direction',
+    heightAndRounding: 'Height and rounding of the iframe',
+    borderRadius: 'Border radius',
+    iframeHeight: 'Iframe height',
+    maxHeight: {
+      label: 'Maximum iframe height',
+      hint: 'For example, enter a little more than the height of your navigation bar on mobile.',
+    },
+    integration: 'Integration',
+    link: 'Link',
+    iframe: {
+      part1: 'If you are satisfied with the preview of your guidebook, we can now proceed with integrating it onto your website!',
+      part2: 'To integrate your guidebook onto your website, copy the code below and paste it onto the page you wish to integrate it onto on your website:',
+    },
+    padLink: {
+      part1: 'If you are satisfied with the preview of your guidebook, we can now proceed with integrating it onto your pad!',
+      part2: 'Copy the link below, open it on your pad, and lock your pad in kiosk mode.',
     },
   },
   climbingStyle: {

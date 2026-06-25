@@ -7,6 +7,7 @@ export default {
   showRouteList: 'Voir les voies',
   showClimbingGym: 'Voir la salle',
   map: 'Plan',
+  no: 'Non',
   loadingGym: 'Chargement de salle ...',
   loading3D: 'Chargement du 3D ...',
   seeOnOblyk: 'Voir sur Oblyk',
@@ -15,6 +16,7 @@ export default {
   stayUpDate: 'Restez informé des dernières actualités',
   trackYourProgress: 'Suis ta progression',
   shareOpinion: 'Donnes ton avis',
+  preview: 'Prévisualisation',
   actions: {
     close: 'Fermer',
     get: 'Récupérer',
@@ -22,6 +24,10 @@ export default {
     seeOnMyPhone: 'Voir sur mon tél',
     replay: 'Rejouer',
     selectSpaceFor: 'Sélectionnez un espace pour voir les secteurs',
+    addColor: 'Ajouter une couleur',
+    applyBackground: 'Appliquer le fond',
+    copied: 'Copié !',
+    copy: 'Copié',
     selectSectorFor: {
       sport_climbing: 'Sélectionnez un secteur pour voir les voies',
       bouldering: 'Sélectionnez un secteur pour voir les blocs',
@@ -45,6 +51,41 @@ export default {
     anchor_number: 'Relais n°',
     videos: {
       noVideos: 'Il n\'y a pas encore de vidéo sur cette ligne',
+    },
+  },
+  gymCustomisation: {
+    title: 'Intégrer le topo de ma salle',
+    intro: 'Cette interface vous permet de créer la parfaite intégration de votre topo sur votre site internet, ou sur une tablette dans votre salle <cite>(mode kiosk)</cite><br>Les options que vous choisissez ici ne sont pas sauvegardées et n\'impacteront, ni votre topo sur Oblyk, ni les précédentes intégrations que vous auriez pu faire avec cette interface.',
+    where: 'Où souhaitez-vous intéger votre topo ?',
+    onMyWebSite: {
+      title: 'Sur mon site internet',
+      hint: '* Le mode Iframe vous permet d\'intégrer votre salle à votre site internet.',
+    },
+    onMyPad: {
+      title: 'Sur une tablette',
+      hint: '* Le mode kiosk vous permet d\'afficher le topo de votre salle sur une tablette dans votre salle.',
+    },
+    theme: 'Quel thème souhaitez vous ?',
+    background: 'Souhaitez-vous personnaliser la couleur du fond ?',
+    customizeBackground: 'Personnaliser ma sélection :',
+    colorIndex: 'Couleur %{index}',
+    gradientDirection: 'Direction du dégradé',
+    heightAndRounding: 'Height and rounding of the iframe',
+    borderRadius: 'Arrondi des angles',
+    iframeHeight: 'Hauteur de l\'Iframe',
+    maxHeight: {
+      label: 'Hauteur max de l\'Iframe',
+      hint: 'Renseignez, par exemple, un peu plus que la hauteur de votre barre de navigation sur mobile.',
+    },
+    integration: 'L\'intégration',
+    link: 'Le lien',
+    iframe: {
+      part1: 'Si vous êtes satisfait de la prévisualisation de votre topo, alors nous pouvons passer à l\'intégration de celui-ci sur votre site internet !',
+      part2: 'Pour intéger votre topo à votre site web, copiez le code ci-dessous et collez-le dans sur la page que vous souhaitez sur votre site internet :',
+    },
+    padLink: {
+      part1: 'Si vous êtes satisfait de la prévisualisation de votre topo, alors nous pouvons passer à l\'intégration de celui-ci sur votre tablette !',
+      part2: 'Copier le lien ci-dessous, ouvrez-le sur votre tablette et bloquer votre tablette en mode kiosk.',
     },
   },
   climbingStyle: {
