@@ -39,6 +39,7 @@ export default {
     sector: 'Secteur',
     color: 'Couleur',
     grade: 'Cotation',
+    reloadingIn: 'Rechargement dans ...',
     routeSorts: {
       opened_at: 'Trier par date d\'ouverture',
       sector: 'Trier par secteur',

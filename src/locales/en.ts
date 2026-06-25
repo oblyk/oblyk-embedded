@@ -37,6 +37,7 @@ export default {
     sector: 'Sector',
     color: 'Color',
     grade: 'Grade',
+    reloadingIn: 'Reloading in ...',
     routeSorts: {
       opened_at: 'Sort by opening date',
       sector: 'Sort by sector',

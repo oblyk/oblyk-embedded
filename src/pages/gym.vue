@@ -126,11 +126,21 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+  <div
+    v-if="countdownCounter < 6"
+    class="font-weight-bold text-center"
+    style="position: fixed; top: 50%; width: 100%"
+  >
+    {{ $t('gym.reloadingIn') }}<br>
+    <strong style="font-size: 3em;">
+      {{ countdownCounter }}
+    </strong>
+  </div>
 </template>
 
 <script setup>
   import QrcodeVue from 'qrcode.vue'
-  import { onBeforeMount, provide, ref, watch } from 'vue'
+  import { onBeforeMount, onBeforeUnmount, provide, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import { useTheme } from 'vuetify'
   import { oblykLogo } from '@/assets/oblyk-icons/index.js'
@@ -156,6 +166,10 @@
   const oblykDialog = ref(false)
   const oblykDialogProgressToClose = ref(100)
   const oblykDialogTimeInterval = ref(null)
+  const timeToRefresh = ref(null)
+  const refreshSoon = ref(null)
+  const countdownInterval = ref(null)
+  const countdownCounter = ref(6)
 
   watch(() => route.params.id, fetchData, { immediate: true })
   provide('Gym:switchGymSpace', switchGymSpace)
@@ -164,7 +178,15 @@
 
   onBeforeMount(() => {
     mode.value = route.query.mode ?? 'iframe'
+    timeToRefresh.value = setInterval(() => location.reload(), 900_000)
+    refreshSoon.value = setTimeout(() => launchCountdown(), 900_000 - 6000)
     setStyle()
+  })
+
+  onBeforeUnmount(() => {
+    clearInterval(timeToRefresh.value)
+    clearInterval(refreshSoon.value)
+    clearInterval(countdownInterval.value)
   })
 
   async function fetchData (id) {
@@ -197,6 +219,10 @@
   function switchGymSector (gymSector) {
     mobileToggle.value = 'active-side--left'
     activeGymSector.value = gymSector
+  }
+
+  function launchCountdown () {
+    countdownInterval.value = setInterval(() => countdownCounter.value -= 1, 1000)
   }
 
   function toggleActiveSide (side) {
