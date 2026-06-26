@@ -1,6 +1,7 @@
 <template>
   <div class="gym-spaces-selector">
     <div
+      v-if="gym.gym_spaces.length > 1"
       class="gym-space-avatar-card"
       @click="spaceSwitch(null)"
     >

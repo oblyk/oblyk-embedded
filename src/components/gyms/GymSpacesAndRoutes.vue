@@ -10,45 +10,46 @@
           value="route-list"
         >
           <div class="gym-spaces-selector-area">
-            <!-- GYM SPACES SELECTOR -->
-            <div class="d-flex">
-              <div class="gym-spaces-selector-container">
-                <gym-spaces-selector
-                  v-if="gym.gym_spaces.length > 1"
-                  :active-gym-space="activeGymSpace"
-                  class="mb-3"
-                  :gym="gym"
-                />
-                <div
-                  v-else
-                  class="text-no-wrap d-flex align-center"
+            <!-- GYM SPACES SELECTOR ON DESKTOP -->
+            <div class="d-flex gym-spaces-selector-and-close-left-side-btn">
+              <gym-spaces-selector
+                v-if="gym.gym_spaces.length > 1"
+                :active-gym-space="activeGymSpace"
+                class="mb-3"
+                :gym="gym"
+              />
+              <div
+                v-else
+                class="text-no-wrap d-flex align-center"
+              >
+                <v-avatar size="60">
+                  <v-img
+                    height="60"
+                    :src="imageVariant(gym.attachments.logo, { fit: 'scale-down', height: 100, width: 100 })"
+                    style="max-width: 60px"
+                    width="60"
+                  />
+                </v-avatar>
+                <h1
+                  class="text-truncate ml-3 font-weight-bold"
                 >
-                  <v-avatar size="60">
-                    <v-img
-                      height="60"
-                      :src="imageVariant(gym.attachments.logo, { fit: 'scale-down', height: 100, width: 100 })"
-                      style="max-width: 60px"
-                      width="60"
-                    />
-                  </v-avatar>
-                  <h1
-                    class="text-truncate ml-3 font-weight-bold"
-                  >
-                    {{ gym.name }}
-                  </h1>
-                </div>
+                  {{ gym.name }}
+                </h1>
               </div>
-              <div class="gym-spaces-close-left-side">
-                <v-btn
-                  class="ml-auto"
-                  elevation="0"
-                  icon
-                  size="large"
-                  @click="toggleActiveSide('active-side--right')"
-                >
-                  <v-icon size="x-large">mdi-backburger</v-icon>
-                </v-btn>
-              </div>
+            </div>
+
+            <!-- GYM SPACES SELECTOR ON MOBILE -->
+            <div class="gym-spaces-and-routes-mobile-header d-flex justify-space-between align-center pl-1">
+              <h1 class="text-truncate">{{ activeGymSpace?.name || gym.name }}</h1>
+              <v-btn
+                class="ml-auto"
+                elevation="0"
+                icon
+                size="large"
+                @click="toggleActiveSide('active-side--right')"
+              >
+                <v-icon size="x-large">mdi-backburger</v-icon>
+              </v-btn>
             </div>
 
             <!-- GYM SECTORS ACTIVE FILTER -->
@@ -113,8 +114,8 @@
   import GymRoutesSort from '@/components/gymRoutes/GymRoutesSort.vue'
   import GymSectorAvatar from '@/components/gymSectors/GymSectorAvatar.vue'
   import GymSpacesSelector from '@/components/gymSpaces/GymSpacesSelector.vue'
+  import { imageVariant } from '@/composables/useImageVariant.js'
   import { oblykApi } from '@/services/oblykApi.js'
-  import {imageVariant} from "@/composables/useImageVariant.js";
 
   const props = defineProps({ gym: Object, activeGymSpace: Object, activeGymSector: Object })
   const tab = ref('route-list')
@@ -158,6 +159,9 @@
   h1 {
     font-size: 1.2rem;
   }
+  .gym-spaces-and-routes-mobile-header {
+    display: none;
+  }
   .embedded-gym-spaces-and-routes-v-sheet {
     border-radius: 15px;
     height: 100%;
@@ -168,6 +172,20 @@
       overflow-y: auto;
       max-height: 100%;
       scrollbar-width: none;
+    }
+  }
+}
+
+// SMARTPHONE
+@media (max-width: 800px) {
+  .embedded-gym-spaces-and-routes {
+    margin-top: 83px;
+    height: calc(100vh - 83px);
+    .gym-spaces-selector-and-close-left-side-btn {
+      display: none;
+    }
+    .gym-spaces-and-routes-mobile-header {
+      display: flex;
     }
   }
 }

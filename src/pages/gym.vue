@@ -52,15 +52,10 @@
       </div>
     </div>
     <div class="embedded-gym-toggle">
-      <v-btn
-        class="border"
-        color="black"
-        prepend-icon="mdi-format-list-text"
-        rounded="xl"
-        @click="switchSide"
-      >
-        {{ mobileToggle === 'active-side--left' ? $t('showClimbingGym') : $t('showRouteList') }}
-      </v-btn>
+      <gym-spaces-selector
+        :active-gym-space="activeGymSpace"
+        :gym="gym"
+      />
     </div>
   </div>
   <div
@@ -148,6 +143,7 @@
   import GymThreeD from '@/components/gyms/GymThreeD.vue'
   import GymSpaceList from '@/components/gymSpaces/GymSpaceList.vue'
   import GymSpacePlan from '@/components/gymSpaces/GymSpacePlan.vue'
+  import GymSpacesSelector from '@/components/gymSpaces/GymSpacesSelector.vue'
   import GymSpaceThreeD from '@/components/gymSpaces/GymSpaceThreeD.vue'
   import AnimateOblykLogo from '@/components/ui/AnimateOblykLogo.vue'
   import OblykLogoName from '@/components/ui/OblykLogoName.vue'
@@ -210,7 +206,7 @@
 
   function switchGymSpace (gymSpace) {
     if (activeGymSpace.value === gymSpace) {
-      mobileToggle.value = 'active-side--right'
+      mobileToggle.value = mobileToggle.value === 'active-side--right' ? 'active-side--left' : 'active-side--right'
     }
     activeGymSector.value = null
     activeGymSpace.value = gymSpace
@@ -227,10 +223,6 @@
 
   function toggleActiveSide (side) {
     mobileToggle.value = side
-  }
-
-  function switchSide () {
-    mobileToggle.value = mobileToggle.value === 'active-side--left' ? 'active-side--right' : 'active-side--left'
   }
 
   function setStyle () {
@@ -285,8 +277,10 @@
   .embedded-gym-toggle {
     display: none;
     position: absolute;
-    bottom: 13px;
-    left: calc(50% - 76px);
+    width: 100%;
+    padding: 3px;
+    top: 0;
+    left: 0;
   }
   .embedded-gym-clic-to-space {
     position: absolute;
@@ -322,6 +316,8 @@
   right: 8px;
   height: 19px;
 }
+
+// SMARTPHONE
 @media (max-width: 800px) {
   .embedded-gym {
     .embedded-gym-container {
@@ -343,6 +339,8 @@
       z-index: 510;
     }
     .embedded-gym-clic-to-space {
+      top: auto;
+      bottom: 50px;
       width: 100vw;
     }
     &.active-side--right {
