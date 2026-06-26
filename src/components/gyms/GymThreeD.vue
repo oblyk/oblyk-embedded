@@ -119,7 +119,7 @@
     renderer.value = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.value.shadowMap.enabled = true
     renderer.value.shadowMap.type = THREE.PCFSoftShadowMap
-    renderer.value.setPixelRatio(window.devicePixelRatio)
+    renderer.value.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
     renderer.value.setSize(TDArea.value.offsetWidth, TDArea.value.offsetHeight)
 
     // Load files
@@ -293,7 +293,6 @@
       const spaceId = intersects[0].object.userData.space.id
       glossySpace(spaceId)
     }
-    renderScene()
   }
 
   function unGlossySpace () {
@@ -310,6 +309,8 @@
   function glossySpace (spaceId) {
     unGlossySpace()
     const space = spaces.value.find(space => space.userData.space.id === spaceId)
+    if (!space) return
+
     const intensity = 0.3
     const colorFiltre = {
       r: 0,
@@ -318,13 +319,17 @@
     }
     space.traverse(child => {
       if (child.isMesh) {
-        const color = child.material.color
-        const colorR = Math.round(color.r * 255 * (1 - intensity) + colorFiltre.r)
-        const colorG = Math.round(color.g * 255 * (1 - intensity) + colorFiltre.g)
-        const colorB = Math.round(color.b * 255 * (1 - intensity) + colorFiltre.b)
-        const newRgbColor = `rgb(${colorR}, ${colorG}, ${colorB})`
-        const newColor = new THREE.Color(newRgbColor)
-        child.material = new THREE.MeshBasicMaterial({ color: newColor })
+        // Reuse or create the highlight material once per mesh
+        if (!child.userData.highlightMaterial) {
+          const color = child.userData.material.color
+          const colorR = Math.round(color.r * 255 * (1 - intensity) + colorFiltre.r)
+          const colorG = Math.round(color.g * 255 * (1 - intensity) + colorFiltre.g)
+          const colorB = Math.round(color.b * 255 * (1 - intensity) + colorFiltre.b)
+          child.userData.highlightMaterial = new THREE.MeshBasicMaterial({
+            color: new THREE.Color(`rgb(${colorR}, ${colorG}, ${colorB})`),
+          })
+        }
+        child.material = child.userData.highlightMaterial
       }
     })
     activeSpaceId.value = spaceId

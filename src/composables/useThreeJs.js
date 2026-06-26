@@ -120,6 +120,9 @@ export function useThreeJs (updateLabelsPosition) {
           child.material.dispose()
         }
       }
+      if (child.userData.highlightMaterial) {
+        child.userData.highlightMaterial.dispose()
+      }
     })
     object = null
   }
@@ -134,17 +137,19 @@ export function useThreeJs (updateLabelsPosition) {
 
     if (scene.value !== null) {
       scene.value.traverse(object => {
-        if (!object.isMesh) {
-          return
+        if (object.geometry) {
+          object.geometry.dispose()
         }
-        object.geometry.dispose()
-        if (object.material.isMaterial) {
-          cleanMaterial(object.material)
-        } else {
-          for (const material of object.material) {
-            cleanMaterial(material)
+        if (object.material) {
+          if (Array.isArray(object.material)) {
+            for (const material of object.material) {
+              cleanMaterial(material)
+            }
+          } else {
+            cleanMaterial(object.material)
           }
         }
+        removeObject(object)
       })
     }
 
@@ -206,8 +211,10 @@ export function useThreeJs (updateLabelsPosition) {
     if (!autoRotate.value) {
       orbitControls.value.autoRotate = true
       orbitControls.value.autoRotateSpeed = autoRotateSpeed
+      orbitControls.value.removeEventListener('change', renderScene)
       animate()
     } else if (animationId.value !== null) {
+      orbitControls.value.addEventListener('change', renderScene)
       cancelAnimationFrame(animationId.value)
     }
     autoRotate.value = !autoRotate.value
