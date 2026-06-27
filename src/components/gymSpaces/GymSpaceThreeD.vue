@@ -128,7 +128,7 @@
     renderer.value = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.value.shadowMap.enabled = true
     renderer.value.shadowMap.type = THREE.PCFSoftShadowMap
-    renderer.value.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
+    renderer.value.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.value.setSize(TDArea.value.offsetWidth, TDArea.value.offsetHeight)
 
     // Orbit orbitControls
