@@ -67,7 +67,7 @@
         prepend-icon="mdi-circle-off-outline"
         @click="background = false"
       >
-        {{ 'no' }}
+        {{ $t('no') }}
       </v-btn>
       <v-btn
         class="mr-1"
