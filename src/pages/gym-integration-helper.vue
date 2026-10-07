@@ -338,6 +338,9 @@
       url.searchParams.set('bg_color', bgColor.value)
       url.searchParams.set('bg_linear_deg', degree.value)
     }
+    if (mode.value === 'kiosk') {
+      url.searchParams.set('mode', mode.value)
+    }
     return url.toString()
   })
 
